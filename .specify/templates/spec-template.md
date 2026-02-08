@@ -80,17 +80,6 @@
 <!--
   ACTION REQUIRED: The content in this section represents placeholders.
   Fill them out with the right functional requirements.
-  
-  CONSTITUTIONAL CONSTRAINTS:
-  - Technology stack is LOCKED: React 19.2.4, ASP.NET Core 10, SQL Server 2025
-  - TypeScript is mandatory on client (JavaScript only as last resort with justification)
-  - All data access MUST use stored procedures via Dapper (no Entity Framework)
-  - All stored procedures MUST implement tState output pattern
-  - Database naming: Tables = <Domain>_<Entity>, Procedures = <Domain><Entity><Action>
-  - TDD is mandatory: No production code without tests
-  - Swagger/OpenAPI required for all APIs
-  - Auditing required for authentication, security changes, and data mutations
-  - See .specify/memory/constitution.md for complete constraints
 -->
 
 ### Functional Requirements

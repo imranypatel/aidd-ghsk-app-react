@@ -1,81 +1,36 @@
 <!--
 SYNC IMPACT REPORT
-==================
-Version Change: 1.0.0 → 1.1.0
-Change Type: MINOR (New principle section added with material guidance)
-Ratified: 2026-02-08
-Last Amended: 2026-02-08
+===================
+Version Change: INITIAL → 1.0.0
+Rationale: Initial constitutional establishment for TRANDTS Enterprise Management System.
+          This is a MAJOR version as it defines the complete governance framework.
 
-Summary of v1.1.0 Changes:
-- Added Section VIII: Application Architecture & Boundaries (NON-NEGOTIABLE)
-- Defined strictly layered architecture with 4 layers (Presentation, Application, Infrastructure, Database)
-- Established unidirectional dependency flow and explicit responsibility boundaries
-- Added architectural integrity clause: architecture wins over implementation convenience
+Modified Principles: N/A (initial creation)
+Added Sections:
+  - Core Principles (8 principles: Technology Stack Immutability, TypeScript Supremacy, 
+    Material Design Compliance, Test-Driven Development, Structured Logging, 
+    API-First Architecture, Stored Procedure Sovereignty, Layered Architecture Discipline)
+  - Client-Side Constitution (tooling, language rules, UI requirements, logging, testing)
+  - Server-Side Constitution (framework, API standards, logging, testing, data access)
+  - Database Constitution (platform, naming conventions, stored procedures, business logic,
+    tState contract, error codes, transactions, auditing, schema versioning)
+  - Architectural Boundaries (layered model, dependency rules, layer responsibilities)
+  - AI Enforcement Rules
+  - Governance
 
-Previous Version (1.0.0):
-- Initial constitution for the TRANDTS Enterprise Management System
-- Established 7 core principles governing AI-assisted development
-- Defined locked technology stack and architectural constraints
-- Established database-first governance model with tState pattern
-- Created AI enforcement rules for strict compliance
+Removed Sections: N/A (initial creation)
 
-Principles (1.0.0):
-1. Constitutional Authority (Non-Negotiable Rules)
-2. System Architecture (Locked Stack)
-3. Client-Side Constitution (React/TypeScript/MUI)
-4. Server & Middleware Constitution (ASP.NET Core Web API)
-5. Database Constitution (SQL Server 2025, Stored Procedures, tState)
-6. AI Enforcement Rules (Critical Compliance)
-7. Final Directive (Authority and Compliance)
+Templates Requiring Updates:
+  ✅ plan-template.md - Updated constitution check section to reflect database-first, 
+     stored procedure enforcement, and layered architecture validation
+  ✅ spec-template.md - Already aligned (requirements-driven, testable stories)
+  ✅ tasks-template.md - Already aligned (test-first workflow, phase organization)
 
-Principles Added (1.1.0):
-8. Application Architecture & Boundaries (Layered Architecture, Dependency Flow)
+Follow-up TODOs: None - All placeholders filled with concrete values
 
-Templates Updated (1.0.0):
-✅ plan-template.md
-   - Added comprehensive Constitution Check section with specific gates
-   - Technology stack compliance checklist
-   - Database governance validation
-   - Testing requirements (TDD)
-   - API standards
-   - Compliance validation gates
-
-✅ spec-template.md
-   - Added constitutional constraints guidance to Requirements section
-   - Documents locked technology stack
-   - References mandatory patterns (stored procedures, tState, TDD)
-   - Links to constitution for complete constraints
-
-✅ tasks-template.md
-   - Updated Phase 2 (Foundational) with database-first infrastructure tasks
-   - Added DbUp, tState pattern, auditing infrastructure tasks
-   - Emphasized database artifacts BEFORE application code
-   - Added TDD mandatory guidance to test sections
-   - Documented client/server testing tool requirements
-
-Templates Updated (1.1.0):
-✅ plan-template.md
-   - Added Application Architecture Compliance section
-   - Layer boundary validation checklist (4 layers, dependency direction)
-   - Controller/Application/Infrastructure/Database layer responsibility checks
-   - Error flow, cross-cutting concerns, transaction boundary validation
-
-✅ tasks-template.md
-   - Added architecture layer setup tasks to Phase 2 (Foundational)
-   - Layer interface contracts and dependency inversion
-   - Global exception middleware, correlation ID propagation
-   - Updated User Story implementation tasks with layer-specific work
-   - Added layer boundary validation task
-
-Follow-up TODOs:
-- Update plan-template.md Constitution Check with layer boundary validation
-- Update tasks-template.md with architecture validation tasks
-- Create DbUp migration script templates with rollback pairs
-- Define specific application-level error codes (beyond SQL Server native errors)
-- Document tState parsing patterns/utilities for client consumption
-- Create stored procedure code templates with tState implementation
-- Establish code review checklist aligned with constitutional compliance gates
-- Create layer-specific code templates (Controller, Application Service, Repository)
+Deployment Note: This constitution establishes non-negotiable rules for AI-assisted 
+development. All future changes must comply with amendment procedures defined in 
+Governance section.
 -->
 
 # TRANDTS Enterprise Management System Constitution
@@ -87,305 +42,558 @@ Follow-up TODOs:
 
 ---
 
+## Constitutional Authority
+
+This document defines **absolute, non-negotiable rules** governing AI-assisted development for the Enterprise Management System.
+
+**ANY** AI agent, automation, generator, refactor, or recommendation **MUST** strictly comply with this constitution.
+
+**Compliance Rules**:
+- If ambiguity exists, the AI **MUST** ask clarifying questions before proceeding, especially regarding database schema, persistence, transactions, or data integrity
+- Assumptions are **FORBIDDEN**
+- Deviation requires **explicit written approval**
+- This constitution supersedes all other development practices, patterns, or conventions
+
+---
+
 ## Core Principles
 
-### I. Constitutional Authority (NON-NEGOTIABLE)
+### I. Technology Stack Immutability
 
-This constitution defines absolute, non-negotiable rules governing ALL AI-assisted development for the Enterprise Management System.
+**The technology stack is LOCKED and cannot be substituted without explicit approval.**
+
+**Stack Definition**:
+- **Client**: React 19.2.4 (Single Page Application) built with Vite 7.3.1
+- **Server**: ASP.NET Core 10 Web API (API-only, no views/pages/Blazor)
+- **Database**: SQL Server 2025 (existing development environment)
+- **Routing**: React Router 7.13.0
+
+**Rationale**: Stack consistency ensures maintainability, eliminates tooling conflicts, and preserves team expertise. Changes would require retraining, migration effort, and introduce architectural risk.
+
+**Enforcement**:
+- No parallel frameworks or alternative stacks may be introduced
+- No framework version changes without approval
+- AI must reject any suggestion to introduce competing technologies
+
+---
+
+### II. TypeScript Supremacy
+
+**TypeScript is MANDATORY for all client-side code. JavaScript is allowed ONLY as a last resort when TypeScript is technically impossible.**
 
 **Rules**:
-- Any AI agent, automation, generator, refactor, or recommendation MUST strictly comply with this constitution
-- If ambiguity exists, the AI MUST ask clarifying questions before proceeding
-- Assumptions are FORBIDDEN, especially regarding database schema, persistence, transactions, or data integrity
-- Deviation from this constitution requires explicit instruction from authorized personnel
-- Compliance is mandatory and supersedes all other practices
+- All React components, hooks, utilities, services MUST be TypeScript
+- JavaScript usage requires written justification
+- Any JavaScript code MUST be isolated, documented, and flagged for future migration
 
-**Rationale**: Prevents architectural drift, ensures consistency, protects data integrity, and maintains enterprise-grade quality standards across all AI-assisted work.
+**Rationale**: TypeScript provides compile-time safety, self-documenting contracts, and refactoring confidence essential for enterprise-scale applications with multiple developers.
 
----
-
-### II. System Architecture (LOCKED)
-
-The technology stack is immutable and MUST NOT be substituted without explicit approval.
-
-**Architecture**:
-- Application Type: Full-Stack Enterprise Application
-- Client: Single Page Application (SPA)
-- Server: API-only Backend
-- Database: Central Authoritative Data Store
-
-**Technology Stack**:
-- **Client**: React 19.2.4 (Vite 7.3.1), TypeScript mandatory
-- **Server**: ASP.NET Core 10 Web API (latest stable)
-- **Database**: SQL Server 2025 (existing development environment)
-
-**Forbidden**:
-- No substitutions, parallel stacks, or alternative frameworks
-- No MVC Views, Razor Pages, or Blazor rendering on server
-- No Entity Framework or ORM auto-tracking
-
-**Rationale**: Locked stack prevents technology sprawl, ensures team expertise alignment, maintains supportability, and leverages existing infrastructure investments.
+**Enforcement**:
+- AI must refuse to generate JavaScript code unless explicitly instructed with justification
+- All file creation defaults to `.ts` or `.tsx`
+- Type definitions MUST be explicit (no `any` unless justified)
 
 ---
 
-### III. Client-Side Constitution
+### III. Material Design Compliance
 
-TypeScript is mandatory. JavaScript allowed ONLY as last resort when TypeScript is technically impossible (requires justification and documentation).
+**UI implementation MUST use Material Design (MUI) components exclusively.**
 
 **Mandatory Libraries**:
-- @mui/material (Material Design compliance)
-- @emotion/react, @emotion/styled
-- @mui/icons-material
-- @mui/x-data-grid (version 8.x)
-- @mui/x-tree-view (version 8.x)
-- React Router 7.13.0
+- `@mui/material`
+- `@emotion/react`
+- `@emotion/styled`
+- `@mui/icons-material`
+- `@mui/x-data-grid` version 8.x
+- `@mui/x-tree-view` version 8.x
 
 **Requirements**:
 - Follow Material Design principles
-- Accessible by default
-- Support enterprise-scale datasets
-- Structured logging for all significant events (configurable levels, sinks)
-- Console-only logging FORBIDDEN in production
+- Ensure accessibility by default (WCAG 2.1 AA minimum)
+- Support enterprise-scale datasets (10,000+ rows)
+- Consistent theming and component usage
 
-**Testing (Mandatory TDD)**:
-- Approved tools: Vitest, Jest, React Testing Library
-- No production code without tests
-- Coverage MUST include: components, hooks, routing, state transitions
-- Snapshot testing only when meaningful
+**Rationale**: Unified design system ensures professional appearance, reduces custom CSS complexity, provides accessible components out-of-the-box, and delivers enterprise-grade data handling.
 
-**Rationale**: TypeScript prevents runtime type errors; MUI provides consistent enterprise UI; structured logging enables production debugging; TDD ensures client reliability.
+**Enforcement**:
+- AI must use MUI components for all UI elements
+- Custom components allowed only when MUI cannot provide the functionality
+- Custom styling must use MUI theming system
 
 ---
 
-### IV. Server & Middleware Constitution
+### IV. Test-Driven Development (NON-NEGOTIABLE)
 
-ASP.NET Core Web API is the exclusive server framework.
+**NO production code may be written without tests. TDD is MANDATORY.**
 
-**Mandatory Standards**:
-- Swagger (OpenAPI) for documentation, manual testing, and API contract definition
-- RESTful APIs with consistent response envelopes
-- API versioning enforced
-- Serilog for structured, configurable, centralized logging (correlation IDs, request/response metadata, error context)
+**Client-Side Testing**:
+- **Tools**: Vitest, Jest, React Testing Library
+- **Coverage**: Components, hooks, routing, state transitions
+- **No snapshot testing** unless semantically meaningful
 
-**Testing (Mandatory TDD)**:
-- Approved tools: xUnit, NUnit
-- Business logic MUST be unit tested
-- Integration tests REQUIRED for APIs and database interactions
-- No database-dependent logic without test coverage
+**Server-Side Testing**:
+- **Tools**: xUnit, NUnit
+- **Coverage**: Business logic (unit tests), API endpoints (integration tests), database interactions (integration tests)
+- **No database-dependent logic without test coverage**
 
-**Data Access**:
-- Dapper is MANDATORY
-- Primary access: Stored Procedures
-- Secondary (exceptional, requires approval): Parameterized SQL queries (read-only only)
-- FORBIDDEN: Entity Framework, ORM auto-tracking, direct table access
+**TDD Workflow**:
+1. Write tests FIRST
+2. Ensure tests FAIL
+3. Implement minimal code to pass
+4. Refactor with tests as safety net
 
-**Rationale**: API-only keeps client/server decoupled; Swagger ensures contract clarity; Serilog provides production diagnostics; Dapper with stored procedures enforces database governance.
+**Rationale**: Tests prevent regressions, document intent, enable confident refactoring, and ensure correctness. TDD catches design flaws early and produces testable architecture.
+
+**Enforcement**:
+- AI must refuse to generate production code without corresponding tests
+- Tests must be written before implementation
+- All pull requests must include test evidence
 
 ---
 
-### V. Database Constitution (AUTHORITATIVE)
+### V. Structured Logging (Mandatory)
 
-SQL Server 2025 is the rule-enforcing authority, not a passive persistence layer.
+**All significant events MUST be logged with structured, configurable logging.**
 
-**Naming Conventions (Immutable)**:
-- Tables: `<Domain>_<Entity>` (e.g., `Sec_Users`, `Core_Students`, `Ref_Lookups`)
-- Stored Procedures: `<Domain><Entity><Action>` (e.g., `Sec_Users_Get`, `Sec_Users_Authenticate_User`)
-- Explicit action verbs only; single responsibility per procedure
+**Client-Side Logging**:
+- Structured logging for all significant events
+- Configurable (levels, enable/disable, sinks)
+- Console-only logging **FORBIDDEN** in production
 
-**Stored Procedures as Primary Interface**:
-- ALL CRUD operations MUST use stored procedures
-- Direct table access FORBIDDEN
-- Dapper calls procedures by name
+**Server-Side Logging**:
+- **Serilog MANDATORY**
+- Structured, configurable, centralized
+- Must include: correlation IDs, request/response metadata, error context
 
-**Standard Output Contract (tState)**:
-- Every procedure MUST return: `@tState VARCHAR(500) OUTPUT`
-- Format: `<STATUS>~<ERRORCODE>~<DATA>~<MESSAGE>`
-  - STATUS: `OK` or `ERR`
-  - ERRORCODE: `00000`, application error code, or SQL Server error number
-  - DATA: relevant value or `N/A`
-  - MESSAGE: human-readable explanation
-- Examples:
-  - `OK~00000~USERID=1024~Login successful`
-  - `ERR~8134~N/A~Divide by zero error occurred`
+**Rationale**: Structured logs enable automated analysis, troubleshooting, compliance auditing, and performance monitoring. Unstructured logs are unmaintainable at scale.
 
-**Error Handling**:
-- AI MUST define application-level error code taxonomy
+**Enforcement**:
+- AI must include logging in all service methods, error handlers, and critical paths
+- Logs must use structured format (JSON or similar)
+- Sensitive data must be masked
+
+---
+
+### VI. API-First Architecture
+
+**The server is API-only. Swagger documentation is MANDATORY.**
+
+**API Standards**:
+- RESTful design
+- Versioned endpoints
+- Consistent response envelopes
+- Swagger for documentation, testing, and contract definition
+
+**Forbidden**:
+- MVC Views
+- Razor Pages
+- Blazor server-side rendering
+
+**Rationale**: API-first enables client flexibility, supports mobile/SPA clients, facilitates testing, and enforces separation of concerns.
+
+**Enforcement**:
+- AI must design RESTful endpoints
+- All endpoints must be documented in Swagger
+- Controllers must be thin and delegate to application layer
+
+---
+
+### VII. Stored Procedure Sovereignty
+
+**ALL database access MUST use stored procedures. Dapper is the ONLY data access library.**
+
+**Rules**:
+- **Primary**: Stored procedures for ALL CRUD operations
+- **Secondary** (exceptional, requires approval): Parameterized SQL queries (read-only ONLY)
+- **FORBIDDEN**: Entity Framework, ORM auto-tracking, direct table access
+
+**Naming Conventions** (Immutable):
+- **Tables**: `<Domain>_<Entity>` (e.g., `Sec_Users`, `Com_Configs`, `Ref_Lookups`, `Audit_Operations`)
+- **Procedures**: `<Domain><Entity><Action>` (e.g., `Sec_Users_Get`, `Sec_Users_Authenticate_User`, `Com_Config_Insert`)
+
+**tState Output Contract** (MANDATORY):
+Every stored procedure MUST return: `@tState VARCHAR(500) OUTPUT`
+
+**Format**: `<STATUS>~<ERRORCODE>~<PROCEDURE_NAME>~<DATA>~<MESSAGE>`
+- **STATUS**: `OK` or `ERR`
+- **ERRORCODE**: `00000`, application error code, or native SQL Server error number
+- **DATA**: Relevant value or `N/A`
+- **MESSAGE**: Human-readable text
+
+**Examples**:
+- `OK~00000~USERID=1024~Login successful`
+- `ERR~8134~N/A~Divide by zero error occurred`
+
+**Rationale**: Stored procedures centralize business rules, enforce security, enable optimization, version logic independently, and provide consistent error handling. The database is a rule-enforcing authority, not a passive data store.
+
+**Enforcement**:
+- AI must generate stored procedures before application code
+- AI must refuse to use Entity Framework or direct SQL
+- Every database interaction must call a stored procedure via Dapper
+- tState must be evaluated before processing result sets
+
+---
+
+### VIII. Layered Architecture Discipline
+
+**The application MUST follow strict layered architecture with one-directional dependencies.**
+
+**Layers** (in order):
+1. **Controllers** (HTTP transport only)
+2. **Application** (use case orchestration)
+3. **Infrastructure** (technical implementation)
+4. **Database** (authoritative data engine)
+
+**Dependency Rule**: Controllers → Application → Infrastructure → Database  
+**Reverse dependencies are FORBIDDEN.**
+
+**Layer Responsibilities**:
+
+**Controllers**:
+- Handle HTTP transport
+- Validate requests
+- Invoke Application Layer
+- Return standardized API responses
+- **FORBIDDEN**: Business logic, database access, Dapper usage, transaction handling
+
+**Application**:
+- Orchestrate business use cases
+- Enforce application rules
+- Coordinate infrastructure calls
+- Translate tState into outcomes
+- Control application flow
+- **FORBIDDEN**: SQL, Dapper, HTTP concerns
+
+**Infrastructure**:
+- Execute stored procedures via Dapper
+- Map database result sets
+- Surface raw tState
+- Implement interfaces defined by Application Layer
+- **FORBIDDEN**: Business logic, orchestration
+
+**Database**:
+- Data integrity enforcement
+- Transaction control
+- Minimal defensive logic
+- Auditing
+- Error signaling via tState
+- **FORBIDDEN**: Complex workflow orchestration
+
+**Rationale**: Clear boundaries prevent coupling, enable testability, support independent evolution, and ensure single responsibility. Violations create maintenance nightmares.
+
+**Enforcement**:
+- AI must respect layer boundaries
+- AI must reject bypass implementations
+- AI must ask when responsibility is unclear
+- If convenience conflicts with architecture, architecture wins
+
+---
+
+## Client-Side Constitution
+
+### Tooling and Frameworks
+
+**Build Tool**: Vite 7.3.1  
+**React Version**: 19.2.4  
+**Routing**: React Router 7.13.0
+
+### Language Rules
+
+**TypeScript is mandatory** (see Principle II).
+
+### UI and Design System
+
+**Mandatory libraries** (see Principle III):
+- `@mui/material`, `@emotion/react`, `@emotion/styled`
+- `@mui/icons-material`
+- `@mui/x-data-grid` version 8.x
+- `@mui/x-tree-view` version 8.x
+
+### Client-Side Logging
+
+**Structured logging mandatory** (see Principle V):
+- Configurable levels, sinks
+- No console-only logging in production
+
+### Client-Side Testing
+
+**TDD mandatory** (see Principle IV):
+- **Tools**: Vitest, Jest, React Testing Library
+- **Coverage**: Components, hooks, routing, state transitions
+
+---
+
+## Server-Side Constitution
+
+### Framework
+
+**ASP.NET Core Web API**  
+**Version**: ASP.NET Core 10 (latest stable)
+
+**Forbidden**:
+- MVC Views
+- Razor Pages
+- Blazor rendering
+
+### API Standards
+
+**Swagger MANDATORY** (see Principle VI):
+- RESTful design
+- Versioned endpoints
+- Consistent response envelopes
+
+### Server-Side Logging
+
+**Serilog MANDATORY** (see Principle V):
+- Structured, configurable, centralized
+- Include correlation IDs, request/response metadata, error context
+
+### Server-Side Testing
+
+**TDD mandatory** (see Principle IV):
+- **Tools**: xUnit, NUnit
+- **Coverage**: Business logic, API endpoints, database interactions
+
+### Data Access Layer
+
+**Dapper MANDATORY** (see Principle VII):
+- Primary: Stored procedures
+- Secondary (exceptional): Parameterized SQL (read-only only, requires approval)
+
+---
+
+## Database Constitution (AUTHORITATIVE)
+
+### Platform
+
+**SQL Server 2025**
+
+The database is a **rule-enforcing authority**, not a passive persistence layer.
+
+### Naming and Structural Conventions (Immutable)
+
+**Table Naming**: `<Domain>_<Entity>`  
+Examples: `Sec_Users`, `Com_Configs`, `Ref_Lookups`, `Audit_Operations`
+
+**Stored Procedure Naming**: `<Domain><Entity><Action>`  
+Examples: `Sec_Users_Get`, `Sec_Users_Authenticate_User`, `Com_Config_Insert`
+
+**Rules**:
+- Explicit action verbs only
+- Single responsibility per procedure
+- No ambiguous or overloaded names
+
+### Stored Procedures as Primary Interface
+
+**ALL CRUD operations MUST use stored procedures.**  
+Direct table access is **FORBIDDEN**.
+
+### Business Logic Placement
+
+**Allowed inside stored procedures** (minimal only):
+- Authentication checks
+- Authorization validation
+- Integrity enforcement
+- Status transitions
+- Defensive checks
+
+**Disallowed**:
+- Complex business workflows
+- Cross-aggregate orchestration
+
+**Rationale**: The database enforces correctness, not business orchestration.
+
+### Standard Output Contract (tState)
+
+**MANDATORY**: Every stored procedure MUST return `@tState VARCHAR(500) OUTPUT`
+
+**Format**: `<STATUS>~<ERRORCODE>~<PROCEDURE_NAME>~<DATA>~<MESSAGE>`
+
+(See Principle VII for details and examples)
+
+### Error Code Policy
+
+**AI MUST define and enforce application-level error code taxonomy.**
+
+**Requirements**:
 - Native SQL Server error numbers MUST be preserved and surfaced
-- Procedures MUST use TRY...CATCH and expose ERROR_NUMBER() and ERROR_MESSAGE()
-- SQL errors MUST NOT be masked
+- Stored procedures MUST use `TRY…CATCH` and expose: `ERROR_NUMBER()`, `ERROR_MESSAGE()`
+- SQL errors must **NEVER** be masked
 
-**Dual Output Model**:
-- Procedures may return result sets
-- tState MUST ALWAYS be returned alongside result sets
-- Consumers MUST evaluate tState first, process result sets only if STATUS = OK
+### Result Sets and tState (Dual Output Model)
 
-**Transaction Ownership**:
-- Transactions owned inside stored procedures
-- All mutating procedures MUST: Begin transaction, Commit on success, Rollback on failure
-- Application-level transaction control FORBIDDEN unless explicitly authorized
+**Stored procedures may return result sets AND tState.**
 
-**Auditing (Mandatory)**:
-- Required for: authentication attempts, security changes, insert/update/delete operations
-- Audit records MUST include: user identifier, timestamp, action, entity, success/failure, error code
-- Implemented using Audit_* tables/procedures
+**Consumer Rules**:
+1. Evaluate tState FIRST
+2. Process result sets ONLY if `STATUS = OK`
 
-**Schema Versioning**:
-- DbUp is MANDATORY
-- Manual production changes FORBIDDEN
-- Every migration MUST: be idempotent, be versioned, have paired rollback script
-- Example: `003_Add_LastLogin_To_Sec_Users.sql` + `003_Rollback_Add_LastLogin_To_Sec_Users.sql`
-- AI MUST refuse irreversible migrations unless explicitly instructed
+### Transaction Ownership
 
-**Business Logic Placement**:
-- Allowed in procedures (minimal): authentication checks, authorization validation, integrity enforcement, status transitions, defensive checks
-- Disallowed: complex business workflows, cross-aggregate orchestration
-- Database enforces correctness, not business orchestration
+**Transactions are owned INSIDE stored procedures.**
 
-**Rationale**: Database-as-authority ensures data integrity at the source; tState provides consistent error handling; stored procedures enforce encapsulation; DbUp enables safe schema evolution.
+**Mutating procedures MUST**:
+- Begin transaction
+- Commit on success
+- Rollback on failure
+
+**Application-level transaction control is FORBIDDEN** unless explicitly authorized.
+
+### Auditing and Traceability (Mandatory)
+
+**Auditing required for**:
+- Authentication attempts
+- Security changes
+- Insert, update, delete operations
+
+**Audit records MUST include**:
+- User identifier
+- Timestamp
+- Action
+- Entity
+- Success or failure
+- Error code
+
+**Implementation**: Use `Audit_*` tables and/or procedures.
+
+### Schema Versioning and Migration
+
+**DbUp is MANDATORY.**
+
+**Manual production changes are FORBIDDEN.**
+
+**Every migration MUST**:
+- Be idempotent
+- Be versioned
+- Have a paired rollback script
+
+**Example**:
+- `003_Add_LastLogin_To_Sec_Users.sql`
+- `003_Rollback_Add_LastLogin_To_Sec_Users.sql`
+
+**AI must refuse irreversible migrations** unless explicitly instructed.
 
 ---
 
-### VI. AI Enforcement Rules (CRITICAL)
+## Architectural Boundaries
 
-The AI agent MUST enforce all constitutional rules during every operation.
+### Architectural Model
 
-**AI MUST**:
+**Strict layered architecture with explicit responsibilities** (see Principle VIII).
+
+### Dependency Direction (Critical)
+
+**One-directional flow**: Controllers → Application → Infrastructure → Database
+
+### Layer Responsibilities
+
+(See Principle VIII for full details)
+
+**Controllers**: HTTP transport only  
+**Application**: Use case orchestration  
+**Infrastructure**: Technical implementation  
+**Database**: Authoritative data engine
+
+### Error Flow & Responsibility
+
+**Error propagation**: Database → Infrastructure → Application → Controller
+
+**Rules**:
+- Database reports errors
+- Application interprets
+- Controller formats
+- No layer may interpret errors belonging to another layer
+
+### Cross-Cutting Concerns Governance
+
+**Logging**: Middleware or infrastructure sinks only  
+**Auditing**: Triggered by Application Layer, executed in Infrastructure/Database  
+**Exception Handling**: Centralized middleware  
+**Correlation IDs**: Generated at request entry, propagated across layers
+
+### Transaction Boundaries
+
+**Database owns transactions.**  
+Application defines intent.  
+Infrastructure executes within database boundaries.  
+**Application MUST NOT start/manage transactions.**
+
+### Architectural Integrity Clause
+
+**If implementation convenience conflicts with architecture, architecture wins.**
+
+Violating code MUST be rejected and regenerated.
+
+---
+
+## AI Enforcement Rules (CRITICAL)
+
+### AI MUST
+
 - Enforce all naming conventions
 - Generate database artifacts BEFORE application code
-- ALWAYS implement tState pattern
+- Always implement tState
 - Preserve native SQL Server error numbers
-- Generate DbUp forward and rollback scripts
-- Ask clarifying questions when ambiguity exists
-- Validate compliance before code generation
+- Generate DbUp forward AND rollback scripts
+- Respect layer boundaries
+- Reject bypass implementations
+- Ask questions when responsibility is unclear
+- Prefer composition over coupling
 
-**AI MUST NOT**:
-- Introduce ORMs (Entity Framework, etc.)
+### AI MUST NOT
+
+- Introduce ORMs (Entity Framework or similar)
 - Bypass stored procedures
 - Assume schema details
 - Suppress database errors
 - Drift from this constitution
-- Proceed with assumptions
-
-**Rationale**: AI enforcement ensures constitutional compliance, prevents architectural violations, maintains consistency, and protects enterprise standards.
-
----
-
-### VIII. Application Architecture & Boundaries (NON-NEGOTIABLE)
-
-The application follows a strictly layered architecture with explicit responsibility boundaries that are enforceable, not advisory.
-
-**Architectural Model (4 Layers)**:
-1. **Presentation Layer** (API Controllers)
-2. **Application Layer** (Use Case Orchestration)
-3. **Infrastructure Layer** (Technical Implementation)
-4. **Database Layer** (Authoritative Data Engine)
-
-**Dependency Direction (CRITICAL)**:
-- Dependencies MUST flow in one direction only: Presentation → Application → Infrastructure → Database
-- Reverse dependencies are STRICTLY FORBIDDEN
-- No layer may bypass another layer
-
-**Layer 1: Presentation Layer (API Controllers)**:
-- **Scope**: ASP.NET Core Web API Controllers
-- **Responsibilities**: Handle HTTP transport, validate request shape (not business rules), invoke Application Layer use cases, return standardized API responses
-- **Forbidden**: Business logic, database access (direct or indirect), Dapper usage, transaction handling, error code interpretation, cross-cutting concerns implementation
-- **Rule**: Controllers MUST be thin and MUST NOT contain decision-making logic
-
-**Layer 2: Application Layer (Use Case Orchestration)**:
-- **Scope**: Application Services / Use Case Handlers
-- **Responsibilities**: Orchestrate business use cases, enforce application-level rules, coordinate multiple infrastructure calls, translate database tState into application outcomes, control application flow
-- **Rules**: One service per use case, stateless services, explicit input/output models
-- **Allowed**: Business decisions, validation logic, conditional flows
-- **Forbidden**: SQL or Dapper code, stored procedure execution, infrastructure implementation details
-- **Authority**: PRIMARY owner of business behavior
-
-**Layer 3: Infrastructure Layer (Technical Implementation)**:
-- **Scope**: Dapper repositories, external system integrations, logging sinks, audit writers
-- **Responsibilities**: Execute stored procedures, map database result sets, surface raw tState without interpretation, implement interfaces defined by Application Layer
-- **Rules**: Infrastructure depends on Application contracts (not vice versa), no business logic, no decision-making
-- **Forbidden**: HTTP concerns, use case orchestration, error translation
-- **Nature**: Mechanical executor
-
-**Layer 4: Database Layer (Authoritative Data Engine)**:
-- **Scope**: SQL Server 2025
-- **Responsibilities**: Data integrity enforcement, transaction control, minimal defensive logic, auditing, error signaling via tState
-- **Rules**: Owns transactions, owns data consistency, does not orchestrate workflows
-- **Constraint**: Database never calls upward layers
-
-**Error Flow & Responsibility**:
-- Flow: Database → Infrastructure (raw tState + result sets) → Application Layer (interpretation and decision) → Presentation Layer (HTTP mapping)
-- Database reports errors, Application decides meaning, Presentation formats response
-- No layer may interpret errors belonging to another layer
-
-**Cross-Cutting Concerns Governance**:
-- **Logging**: Implemented via middleware and infrastructure sinks (never inline in business logic)
-- **Auditing**: Triggered by Application Layer, executed by Infrastructure or Database
-- **Exception Handling**: Centralized global exception middleware (controllers must not catch general exceptions)
-- **Correlation IDs**: Generated at request entry, propagated across all layers
-
-**Transaction Boundaries**:
-- Database Layer owns database transactions
-- Application Layer defines transactional intent
-- Infrastructure executes within database-defined boundaries
-- Application code MUST NOT start or manage database transactions
-
-**AI Enforcement (Architecture)**:
-- AI MUST: Generate code respecting layer boundaries, reject implementations that bypass layers, ask questions when responsibility is unclear, prefer composition over coupling
-- AI MUST NOT: Place business logic in controllers, place orchestration in infrastructure, place application logic in database, break dependency direction
-
-**Architectural Integrity Clause**:
-- If any architectural rule conflicts with implementation convenience, THE ARCHITECTURE WINS
-- If any generated code violates this section, it MUST be rejected and regenerated
-
-**Rationale**: Layered architecture enforces separation of concerns, prevents coupling, ensures testability, maintains clean boundaries, and enables independent evolution of each layer without affecting others.
-
----
-
-### IX. Final Directive (AUTHORITY AND COMPLIANCE)
-
-This constitution is authoritative and supersedes all other practices, preferences, or suggestions.
-
-**Mandate**:
-- Compliance is MANDATORY
-- Deviation requires explicit written instruction
-- When in doubt, ask—do not assume
-- All work products MUST align with constitutional principles
-- Code reviews MUST verify constitutional compliance
-
-**Rationale**: Establishes clear hierarchy of authority, prevents drift, ensures consistent quality, and maintains enterprise governance.
+- Place business logic in controllers
+- Place orchestration in infrastructure
+- Place application logic in database
+- Break dependency direction
+- Generate JavaScript without justification
+- Use non-MUI UI components without justification
+- Write production code before tests
 
 ---
 
 ## Governance
 
-This constitution supersedes all other development practices, coding standards, and AI behaviors.
+### Amendment Procedure
 
-**Amendment Process**:
-- Amendments require explicit approval from project authority
-- Version number MUST increment following semantic versioning:
-  - MAJOR: Backward incompatible governance/principle removals or redefinitions
-  - MINOR: New principle/section added or materially expanded guidance
-  - PATCH: Clarifications, wording, typo fixes, non-semantic refinements
-- All amendments MUST include rationale and impact analysis
-- Migration plan required for breaking changes
+**Constitution amendments require**:
+1. Written proposal with rationale
+2. Impact analysis on existing code and templates
+3. Approval from project lead
+4. Migration plan (if applicable)
+5. Version bump according to semantic versioning
 
-**Compliance Review**:
-- All pull requests MUST verify constitutional compliance
-- Code reviews MUST check:
-  - Technology stack alignment
-  - Naming convention adherence
-  - tState implementation
-  - Stored procedure usage
-  - Audit trail presence
-  - Test coverage
-  - Layer boundary respect
-  - Dependency direction adherence
-- Complexity introduced MUST be justified against constitutional principles
-- Constitutional violations MUST be rejected
+**Version Semantics**:
+- **MAJOR**: Backward incompatible governance/principle removals or redefinitions
+- **MINOR**: New principle/section added or materially expanded guidance
+- **PATCH**: Clarifications, wording, typo fixes, non-semantic refinements
 
-**Development Guidance**:
-- Use this constitution as the primary reference during all AI-assisted development
-- Refer to `.specify/templates/` for implementation templates aligned with this constitution
-- When implementing features, validate against constitutional principles at each phase
+### Compliance Review
 
-**Version**: 1.1.0 | **Ratified**: 2026-02-08 | **Last Amended**: 2026-02-08
+**All PRs/reviews must verify compliance with this constitution.**
+
+**Complexity violations must be justified** (see plan-template.md Complexity Tracking section).
+
+### Runtime Guidance
+
+Use `.specify/templates/commands/*.md` files for command-specific execution workflows.
+
+Use `.specify/templates/plan-template.md` Constitution Check section for gate validation.
+
+### Non-Compliance Consequences
+
+**Code that violates this constitution MUST be**:
+- Flagged immediately
+- Rejected in code review
+- Rewritten to comply
+
+**No exceptions without written approval.**
+
+---
+
+**Version**: 1.0.0 | **Ratified**: 2026-02-08 | **Last Amended**: 2026-02-08
