@@ -5,6 +5,16 @@
 **Status**: Draft  
 **Input**: User description: "User Login and Logout. User: Admin Password Admin123@"
 
+## Clarifications
+
+### Session 2026-02-09
+
+- Q: When a user enters an incorrect password multiple times, how should the system respond? → A: No lockout mechanism, only display error message for each failed attempt
+- Q: Where should the authentication credentials be validated? → A: Backend API validates against stored credentials in database
+- Q: What should happen when a user tries to log in while already authenticated with an active session? → A: Allow login and refresh the existing session (reset timeout)
+- Q: What authentication-related events should be logged for security auditing and troubleshooting? → A: Log successful logins, failed attempts, logouts, and session expirations with timestamps and usernames
+- Q: What should happen when the session expires while the user is actively working in the application? → A: Silently redirect to login on next user interaction after expiration
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Admin Login (Priority: P1)
@@ -55,10 +65,10 @@ An authenticated administrator closes their browser or navigates away, then retu
 
 ### Edge Cases
 
-- What happens when the user enters valid username but incorrect password multiple times?
+- Multiple incorrect password attempts result in displaying error message "Invalid username or password. Please try again." for each failed attempt with no account lockout or rate limiting applied
 - What happens when the user tries to access protected pages without being authenticated?
-- What happens when the session expires while the user is actively using the application?
-- What happens if the user tries to log in while already logged in?
+- Session expiration after 30 minutes of inactivity does not immediately redirect; user remains on current page until next interaction (click, navigation, API call), then redirected to login page
+- User attempting to log in while already authenticated will have their existing session refreshed with timeout reset, maintaining single session per user
 - What happens when special characters are included in the password?
 - What happens when network connectivity is lost during login attempt?
 - What happens when the user uses browser back button after logout?
@@ -68,7 +78,7 @@ An authenticated administrator closes their browser or navigates away, then retu
 ### Functional Requirements
 
 - **FR-001**: System MUST provide a login interface that accepts a username and password
-- **FR-002**: System MUST authenticate users with username "Admin" and password "Admin123@"
+- **FR-002**: System MUST authenticate users with username "Admin" and password "Admin123@" via backend API validation against stored credentials in database
 - **FR-003**: System MUST validate that username and password fields are not empty before processing login
 - **FR-004**: System MUST display appropriate error messages when authentication fails
 - **FR-005**: System MUST establish an authenticated session upon successful login
@@ -79,16 +89,26 @@ An authenticated administrator closes their browser or navigates away, then retu
 - **FR-010**: System MUST handle password input securely by masking characters as they are typed
 - **FR-011**: System MUST provide clear visual indication of authentication state (logged in vs logged out)
 - **FR-012**: System MUST prevent access to protected application features when user is not authenticated
+- **FR-013**: System MUST refresh existing session and reset timeout when authenticated user submits valid login credentials
+- **FR-014**: System MUST log all authentication events including successful logins, failed login attempts, logouts, and session expirations
+- **FR-015**: System MUST include timestamp and username in all authentication log entries
+- **FR-016**: System MUST detect expired sessions on next user interaction and redirect to login page
+- **FR-017**: System MUST allow users to remain on current page after session expiration until they attempt an interaction
 
 ### Assumptions
 
 - Session timeout period is set to industry-standard 30 minutes of inactivity
-- Password validation is performed by exact string match (case-sensitive)
+- Password validation is performed by BCrypt hash verification with 12 rounds (application layer compares stored hash)
 - Username validation is case-sensitive
 - Single concurrent session per user is acceptable (no multi-device session management required)
-- HTTPS is used for all authentication communications
-- Password storage follows secure hashing best practices
-- Rate limiting for login attempts defaults to standard web application practices (e.g., 5 attempts per 15 minutes)
+- HTTPS is required for all authentication communications in production; HTTP acceptable for local development (localhost:5000, localhost:3000)
+- Password storage follows secure hashing best practices in database
+- Authentication validation performed exclusively by backend API against database-stored credentials
+- Client-side validation limited to empty field checks only; no credential verification on frontend
+- No account lockout mechanism for failed login attempts; system displays error message for each failed attempt without rate limiting or progressive delays
+- All authentication events (successful logins, failed attempts, logouts, session expirations) logged with timestamp and username for security auditing
+- Logging follows structured format compatible with centralized log aggregation and security monitoring systems
+- Session expiration uses lazy detection pattern: no advance warning, user remains on page after timeout until next interaction triggers redirect to login
 
 ### Key Entities
 
@@ -150,11 +170,6 @@ An authenticated administrator closes their browser or navigates away, then retu
 - Optional: Brief success message "Login successful" (Green semantic color)
 - Smooth transition to authenticated application view (300ms max)
 
-**Logout Confirmation**:
-- Logout action must request confirmation: "Are you sure you want to log out?"
-- Confirmation dialog required for destructive session termination
-- Clear "Confirm" and "Cancel" options in confirmation dialog
-
 ### Accessibility Requirements
 
 **Keyboard Navigation**:
@@ -201,7 +216,11 @@ An authenticated administrator closes their browser or navigates away, then retu
 - Errors must be dismissible or auto-clear on new input
 
 **Session Expiry UI**:
-- Session timeout must display clear modal: "Your session has expired. Please log in again."
+- Session expires after 30 minutes of inactivity without immediate interruption
+- User remains on current page until attempting next interaction
+- On next user interaction (click, navigation, form submission), system detects expired session and redirects to login page
+- No advance warning or countdown timer before expiration
+- Session expiry modal displays after redirect: "Your session has expired. Please log in again."
 - Modal must prevent interaction with expired session
 - Single "Log In" button to redirect to login page
 - No data loss message if applicable: "Your work has been saved."

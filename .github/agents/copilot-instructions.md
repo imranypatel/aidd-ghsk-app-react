@@ -3,6 +3,7 @@
 Auto-generated from all feature plans. Last updated: 2026-02-08
 
 ## Active Technologies
+- SQL Server 2025 with Sec_Users and Audit_Operations tables (001-auth-welcome)
 
 
 
@@ -23,6 +24,7 @@ tests/
 General: Follow standard conventions
 
 ## Recent Changes
+- 001-auth-welcome: Added SQL Server 2025 with Sec_Users and Audit_Operations tables
 
 
 

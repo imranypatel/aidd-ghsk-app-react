@@ -31,57 +31,7 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-### Technology Stack Compliance
-- [ ] Client stack: React 19.2.4 + Vite 7.3.1 + React Router 7.13.0 (no substitutions)
-- [ ] Server stack: ASP.NET Core 10 Web API only (no MVC/Razor/Blazor)
-- [ ] Database: SQL Server 2025 with stored procedures (no ORM)
-- [ ] Data access: Dapper only (Entity Framework FORBIDDEN)
-
-### Language & Type Safety
-- [ ] TypeScript mandatory for all client code (JavaScript requires justification)
-- [ ] Explicit typing (no `any` unless justified)
-
-### UI Framework Compliance
-- [ ] MUI (@mui/material, @emotion, @mui/icons-material) mandatory
-- [ ] MUI Data Grid 8.x and Tree View 8.x for data display
-- [ ] Accessibility compliance (WCAG 2.1 AA minimum)
-
-### Testing Requirements (TDD NON-NEGOTIABLE)
-- [ ] Tests written BEFORE implementation
-- [ ] Client: Vitest/Jest + React Testing Library
-- [ ] Server: xUnit/NUnit
-- [ ] Coverage: components, hooks, business logic, API endpoints, database interactions
-
-### Database Architecture
-- [ ] ALL database access via stored procedures (direct SQL FORBIDDEN)
-- [ ] Table naming: `<Domain>_<Entity>` (e.g., `Sec_Users`, `Com_Configs`)
-- [ ] Procedure naming: `<Domain><Entity><Action>` (e.g., `Sec_Users_Get`)
-- [ ] tState output contract: `@tState VARCHAR(500) OUTPUT` format `<STATUS>~<ERRORCODE>~<PROCEDURE_NAME>~<DATA>~<MESSAGE>`
-- [ ] DbUp migrations with forward + rollback scripts
-- [ ] Transactions owned by stored procedures (not application)
-
-### Layered Architecture Compliance
-- [ ] Strict layers: Controllers → Application → Infrastructure → Database
-- [ ] No reverse dependencies
-- [ ] Controllers: HTTP transport only (no business logic, no Dapper)
-- [ ] Application: Use case orchestration (no SQL, no HTTP concerns)
-- [ ] Infrastructure: Dapper execution, tState surfacing (no business logic)
-- [ ] Database: Data integrity, transactions, auditing (no workflow orchestration)
-
-### Logging & Observability
-- [ ] Client: Structured logging (no console-only in production)
-- [ ] Server: Serilog mandatory with correlation IDs
-- [ ] Sensitive data masking
-
-### API Standards
-- [ ] RESTful design with versioned endpoints
-- [ ] Swagger documentation mandatory
-- [ ] Consistent response envelopes
-
-### Auditing Requirements
-- [ ] Authentication attempts logged
-- [ ] Security changes logged
-- [ ] All CUD operations logged with user, timestamp, action, entity, success/failure, error code
+[Gates determined based on constitution file]
 
 ## Project Structure
 

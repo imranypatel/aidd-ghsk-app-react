@@ -1,0 +1,268 @@
+# AIDD EMS - Enterprise Management System
+# .gitignore for .NET + React + SQL Server project
+
+## .NET / C# / ASP.NET Core Backend
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio cache/options
+.vs/
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Mono auto generated files
+mono_crash.*
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# NCrunch
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Serilog Logs
+backend/src/WebApi/logs/
+logs/
+*.log
+
+## React / Node.js Frontend
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+*.lcov
+.nyc_output
+
+# Production builds
+dist/
+dist-ssr/
+build/
+*.local
+
+# Environment files (SECURITY: Never commit secrets!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Editor directories and files
+.vscode/settings.json
+.vscode/launch.json
+.idea
+*.swp
+*.swo
+*~
+
+# npm/yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS specific
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+## Database
+# SQL Server local database files
+*.mdf
+*.ldf
+*.ndf
+
+# Database backup files
+*.bak
+*.sql.bak
+
+# Database publish profiles
+*.publish.xml
+
+## Secrets & Configuration (CRITICAL - NEVER COMMIT!)
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+appsettings.*.json
+!appsettings.json
+secrets.json
+*.pfx
+*.p12
+*.key
+*.pem
+
+# User secrets (ASP.NET Core)
+**/appsettings.local.json
+**/secrets.json
+
+## Testing
+# Test results
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+
+# Playwright
+playwright-report/
+test-results/
+playwright/.cache/
+
+## IDE & Editors
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.sln.docstates
+*.userprefs
+
+# Visual Studio Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json.example
+!.vscode/settings.json.example
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+.idea_modules/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+## OS Files
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+.directory
+.Trash-*
+
+## Temporary Files
+*.tmp
+*.temp
+*.cache
+*.bak
+*.swp
+*.swo
+*~
+
+## Documentation (optional - keep generated docs)
+# Uncomment if you don't want to commit generated API docs
+# docs/api/
+
+## Deployment
+# Publish profiles
+*.pubxml
+*.PublishSettings
+
+# Azure
+*.azurePubxml
+*.publishproj
+
+## Miscellaneous
+# Package files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Project-specific ignores
+# Uncomment if needed:
+/backend/src/WebApi/wwwroot/
+/utilities/temp/

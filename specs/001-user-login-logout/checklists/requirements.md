@@ -2,7 +2,23 @@
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning  
 **Created**: February 9, 2026  
+**Last Updated**: February 9, 2026 (Post-Clarification)  
 **Feature**: [spec.md](../spec.md)
+
+## Clarification Session Summary
+
+**Date**: February 9, 2026  
+**Questions Asked**: 5  
+**Questions Answered**: 5  
+**Status**: Complete
+
+### Clarifications Recorded
+
+1. **Failed login attempts**: No lockout mechanism, only display error message for each failed attempt
+2. **Authentication validation location**: Backend API validates against stored credentials in database
+3. **Already-authenticated login**: Allow login and refresh the existing session (reset timeout)
+4. **Authentication logging**: Log successful logins, failed attempts, logouts, and session expirations with timestamps and usernames
+5. **Session expiration handling**: Silently redirect to login on next user interaction after expiration
 
 ## Content Quality
 
