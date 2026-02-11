@@ -7,7 +7,7 @@
  * @see ../data-model.md for detailed responsive behavior schema
  */
 
-import type { BreakpointKey, BreakpointValues } from './theme';
+import type { BreakpointKey, BreakpointValues } from './theme.js';
 
 // ============================================================================
 // Breakpoint Constants

@@ -14,7 +14,7 @@ declare namespace React {
   export type ReactNode = any;
 }
 
-import type { ThemeMode } from './theme';
+import type { ThemeMode } from './theme.js';
 
 // ============================================================================
 // User Information Types
@@ -183,6 +183,9 @@ export interface NavigationDrawerProps {
 export interface AppBarLayoutProps {
   /** Application title displayed in the AppBar */
   title: string;
+  
+  /** Subtitle displayed below the title (optional) */
+  subtitle?: string;
   
   /** Logo image source URL (optional) */
   logoSrc?: string;

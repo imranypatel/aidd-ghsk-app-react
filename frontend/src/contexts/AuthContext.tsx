@@ -34,19 +34,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const checkSession = async () => {
     try {
       const response = await authService.validateSession();
+      console.log('[AuthContext] Session validation response:', response);
+      
       if (response.success && response.data) {
         // Restore user state from session validation
         setUser({ 
           userId: response.data.userId, 
           username: response.data.username 
         });
+        console.log('[AuthContext] User restored from session:', response.data.username);
       } else {
+        console.log('[AuthContext] Session validation failed, clearing user');
         setUser(null);
       }
-    } catch (error) {
-      // Session validation failed - user needs to log in
-      console.error('[AuthContext] Session validation error:', error);
-      setUser(null);
+    } catch (error: any) {
+      // 401 is expected when user is not authenticated - don't log as error
+      if (error.response?.status === 401) {
+        console.log('[AuthContext] Session validation returned 401');
+        setUser(null);
+      } else {
+        // Log unexpected errors
+        console.error('[AuthContext] Session validation error:', error);
+        setUser(null);
+      }
     } finally {
       setLoading(false);
     }

@@ -32,7 +32,7 @@ describe('Dashboard Component', () => {
     // Mock successful session validation
     vi.spyOn(authService.authService, 'validateSession').mockResolvedValue({
       success: true,
-      data: { userId: 1, expiresAt: '2026-02-10T12:00:00', isValid: true },
+      data: { userId: 1, username: 'TestUser', expiresAt: '2026-02-10T12:00:00', isValid: true },
     });
   });
 

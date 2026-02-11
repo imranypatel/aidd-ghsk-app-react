@@ -5,10 +5,10 @@
 
 ## Summary
 
-This feature redesigns the existing Login Page and Authenticated Layout components with modern, attractive, professional enterprise UI using Material-UI v7.2.0 while maintaining strict compliance with Constitution Section VIII (Enterprise UI/UX Standards). The redesign transforms plain functional components into a polished, modern interface with gradient backgrounds, elevated card layouts, smooth animations, dark mode support, and comprehensive responsive behavior across all supported breakpoints (mobile ≥768px, tablet ≥992px, desktop ≥1200px).
+This feature redesigns the existing Login Page and Authenticated Layout components with modern, attractive, professional enterprise UI using Material-UI v7.2.0 while maintaining strict compliance with Constitution Section VIII (Enterprise UI/UX Standards). The redesign transforms plain functional components into a polished, modern interface with split-screen layouts featuring enterprise background images, gradient overlays, elevated card layouts, smooth animations, dark mode support, and comprehensive responsive behavior across all supported breakpoints (mobile ≥768px, tablet ≥992px, desktop ≥1200px).
 
 **Primary Requirements**:
-- Modern login page with gradient background, elevated card (elevation 8), real-time validation, smooth animations
+- Modern login page with split-screen layout (desktop: 50/50 gradient left + enterprise image right; mobile: full-width enterprise image background with gradient card overlay), elevated card (elevation 8), real-time validation, smooth animations
 - Professional authenticated layout with persistent AppBar, collapsible sidebar navigation, user profile dropdown
 - Light/dark theme toggle with system preference sync, smooth transitions (300ms), FOUC prevention
 - Responsive layouts: persistent sidebar (desktop), mini variant (tablet), drawer overlay (mobile)
@@ -399,18 +399,19 @@ This feature introduces no architecture violations or complexity concerns:
 
 **R001 - Material-UI v7 Theme System Research** [REQUIRED]
 - Study CSS theme variables feature (new in MUI v7)
-- Research dark mode implementation patterns with InitColorSchemeScript
+- Research dark mode implementation patterns for Vite SPA (inline script FOUC prevention, not SSR InitColorSchemeScript)
 - Document color palette structure and tonal offset calculations
 - Identify component style override patterns (theme.components)
 - Extract best practices for responsive theme configuration
 - Output: `research.md` section "MUI v7 Theming Patterns"
 
-**R002 - Gradient Background Techniques** [REQUIRED]
-- Research CSS gradient performance (linear-gradient vs image assets)
-- Evaluate overlay pattern techniques (noise texture, geometric patterns)
-- Document fixed background positioning for scroll performance
-- Test gradient contrast for WCAG AA text overlay compliance
-- Output: `research.md` section "Background Gradient Patterns"
+**R002 - Background Layout Techniques** [REQUIRED]
+- Research split-screen layout patterns (CSS Grid, Flexbox 50/50 split)
+- Evaluate background image techniques (Unsplash enterprise photography, fixed positioning)
+- Document gradient overlay combinations (background gradients + image overlays with rgba tints)
+- Test responsive transformation (desktop split-screen → mobile full-width with gradient card)
+- Test contrast for WCAG AA text overlay compliance on images
+- Output: `research.md` section "Split-Screen Background Patterns"
 
 **R003 - Responsive Sidebar Patterns** [REQUIRED]
 - Research MUI Drawer component variants (permanent, persistent, temporary)
@@ -443,16 +444,17 @@ This feature introduces no architecture violations or complexity concerns:
 
 ### Design Deliverables
 
-**D001 - Login Page Mockup** [REQUIRED]
-- Create high-fidelity mockup in Figma or similar (or detailed written description)
-- Include gradient background with overlay pattern
-- Show card layout with elevation shadow
-- Document spacing measurements (padding, margins)
-- Include both light and dark mode variants
-- Annotate with design tokens (colors, spacing values)
-- Output: `research.md` "Login Page Design" with mockup link or embed
+**D001 - Login Page Mockup** [IMPLEMENTED - DEVIATES FROM ORIGINAL SPEC]
+- **Implemented Design**: Split-screen layout replacing original gradient-only approach
+- **Desktop Layout**: Left 50% with gray-blue gradient (#f5f7fa→#c3cfe2) containing centered Card, Right 50% with enterprise building background image (Unsplash photo-1486406146926) with light blue overlay tint and "Enterprise Management" text
+- **Mobile Layout**: Full-width enterprise building background with blue overlay (rgba(25,118,210,0.7)), Card with gradient background (#f5f7fa→#c3cfe2 light, #1a1a2e→#16213e dark) containing form
+- **Card Details**: Elevation 8 shadow, max-width 400px mobile / 480px desktop, centered positioning
+- **Dark Mode**: Left side gradient changes to #1a1a2e→#16213e, image overlay darker, Card gradient darker variants
+- **Rationale**: User feedback requested more professional enterprise aesthetic with background imagery instead of pure gradients
+- **Note**: Implementation complete and validated through iterative user feedback. Tests need updating to reflect split-screen structure.
+- Output: `research.md` "Login Page Design" with implementation notes
 
-**D002 - Dashboard Layout Mockup** [REQUIRED]
+**D002 - Dashboard Layout Mockup** [RECOMMENDED - Non-Blocking]
 - Create AppBar layout with brand logo, search placeholder, user menu
 - Show sidebar in 3 states: expanded (desktop), mini (tablet), closed (mobile preparation)
 - Document dimensions (AppBar 64px height, Sidebar 240px/64px widths)

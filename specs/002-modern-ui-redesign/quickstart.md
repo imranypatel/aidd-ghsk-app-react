@@ -516,6 +516,24 @@ interface ThemeToggleProps {
 
 ## Responsive Utilities
 
+### Breakpoint Definitions
+
+The application uses three fixed responsive breakpoints per Constitution Section VIII:
+
+| Breakpoint | Minimum Width | Description | Semantic Label |
+|------------|---------------|-------------|----------------|
+| **Mobile** | ≥768px | Minimum supported viewport | `'mobile'` |
+| **Tablet** | ≥992px | Tablet devices, mini drawer | `'tablet'` |
+| **Desktop** | ≥1200px | Desktop devices, full drawer | `'desktop'` |
+
+**Important**: Viewports below 768px receive a degraded experience notice and are not fully supported.
+
+**Usage in Code**:
+- Numerical: `@media (min-width: 768px)`, `@media (min-width: 992px)`, `@media (min-width: 1200px)`
+- Semantic: `state.breakpoint === 'mobile'`, `utils.isUp('tablet')`, `current === 'desktop'`
+
+---
+
 ### useResponsive Hook
 
 **Purpose**: Get current responsive state and utilities
@@ -524,22 +542,22 @@ interface ThemeToggleProps {
 const { state, matches, utils } = useResponsive();
 
 console.log(state.breakpoint);  // 'mobile' | 'tablet' | 'desktop'
-console.log(state.isMobile);    // boolean
-console.log(state.isTablet);    // boolean
-console.log(state.isDesktop);   // boolean
+console.log(state.isMobile);    // boolean (≥768px, <992px)
+console.log(state.isTablet);    // boolean (≥992px, <1200px)
+console.log(state.isDesktop);   // boolean (≥1200px)
 console.log(state.width);       // viewport width in px
 
 // Utility functions
 if (utils.isUp('tablet')) {
-  // Viewport ≥ 992px
+  // Viewport ≥ 992px (tablet + desktop)
 }
 
 if (utils.isDown('desktop')) {
-  // Viewport < 1200px
+  // Viewport < 1200px (mobile + tablet)
 }
 
 if (utils.isBetween('tablet', 'desktop')) {
-  // Viewport between 992px and 1199px
+  // Viewport between 992px and 1199px (tablet only)
 }
 ```
 

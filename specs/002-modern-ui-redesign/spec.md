@@ -18,11 +18,11 @@
 **Acceptance Scenarios**:
 
 1. **Given** user navigates to login page, **When** page loads, **Then** user sees modern gradient background, professional card layout with elevation shadow, brand identity with logo/icon, and welcoming micro-copy
-2. **Given** user views login form, **When** interacting with input fields, **Then** fields show smooth focus transitions, floating labels, clear visual hierarchy, and real-time validation with helpful error messages
+2. **Given** user views login form, **When** interacting with input fields, **Then** fields show focus transitions at 60fps (no dropped frames), floating labels, clear visual hierarchy, and real-time validation with helpful error messages
 3. **Given** user enters invalid credentials, **When** submission fails, **Then** error message appears with smooth animation, clear iconography, actionable guidance, and color-coded severity (semantic red)
 4. **Given** user enters valid credentials, **When** form submits, **Then** button shows loading state with progress indicator, disables to prevent double-submission, and transitions smoothly to dashboard
 5. **Given** user views login page on mobile (≥768px), **When** viewing interface, **Then** layout adapts to single-column, touch-optimized controls (44x44px minimum), full-width with padding, and maintains visual hierarchy
-6. **Given** user with reduced motion preference, **When** interacting with login page, **Then** all animations respect prefers-reduced-motion, transitions are instant or minimal, and functionality remains intact
+6. **Given** user with reduced motion preference, **When** interacting with login page, **Then** all animations respect prefers-reduced-motion, transitions are instant (0ms) or minimal (≤50ms), and functionality remains intact
 7. **Given** keyboard-only user, **When** navigating login form, **Then** all elements accessible via tab, focus indicators clearly visible, Enter key submits form, and Escape clears errors
 
 ---
@@ -35,14 +35,14 @@
 
 **Independent Test**: Can be fully tested by logging in and interacting with the dashboard layout components (app bar, navigation, user menu). Delivers value through improved navigation, user context awareness, and professional appearance independent of dashboard content.
 
-**Acceptance Scenarios**:
+**Acceptance Scenarios** (UPDATED - TreeView Navigation Implementation):
 
-1. **Given** authenticated user views dashboard, **When** page loads, **Then** user sees modern app bar with brand identity, persistent left sidebar for primary navigation, user profile section with avatar, and breadcrumb navigation
+1. **Given** authenticated user views dashboard, **When** page loads, **Then** user sees modern app bar with brand identity, persistent left sidebar with Material-UI X TreeView hierarchical navigation (3+ levels deep), user profile section with avatar, and breadcrumb navigation
 2. **Given** user views top app bar, **When** observing layout, **Then** app bar shows application name/logo (left), global search (center), user profile dropdown with avatar and username (right), and notification icon with badge count
-3. **Given** user interacts with navigation sidebar, **When** hovering over menu items, **Then** items show smooth hover effects, active state highlighting, icon tooltips on collapsed sidebar, and expand on demand for nested items
+3. **Given** user interacts with navigation sidebar TreeView, **When** hovering over menu items, **Then** items show smooth hover effects, active state highlighting with primary color background and left border, hierarchical connecting borders show parent-child relationships, and expand on demand for nested items with 3+ levels (e.g., Reports > Sales Reports > Monthly)
 4. **Given** user clicks user profile dropdown, **When** menu opens, **Then** dropdown shows user information (name, role), quick actions (profile settings, preferences), logout option with confirmation, and smooth expansion animation
 5. **Given** user views dashboard on tablet (≥992px), **When** layout adjusts, **Then** sidebar shows mini variant (icons only), expands on hover, collapses on click-away, and maintains accessibility
-6. **Given** user views dashboard on mobile (≥768px), **When** layout adjusts, **Then** sidebar becomes drawer (hamburger menu), overlays content when open, swipes to dismiss, and top bar remains sticky
+6. **Given** user views dashboard on mobile (≥768px), **When** layout adjusts, **Then** sidebar becomes drawer (hamburger menu) with z-index 1099 below AppBar 1100, overlays content when open, swipes to dismiss, and top bar remains sticky and clickable
 7. **Given** user performs logout action, **When** clicking logout, **Then** confirmation dialog appears, action requires explicit confirmation, shows loading state during logout, and redirects smoothly to login
 
 ---
@@ -75,7 +75,7 @@
 
 **Acceptance Scenarios**:
 
-1. **Given** user views any page, **When** observing layout, **Then** all spacing follows 8px spatial system, margins and padding are consistent and predictable, and white space improves readability
+1. **Given** user views any page, **When** observing layout, **Then** all spacing complies with FR-010 (8px grid system), margins and padding are consistent and predictable, and white space improves readability
 2. **Given** user views typography, **When** reading content, **Then** headings follow Material Design type scale (h1-h6), body text is 16px minimum for readability, line height is 1.5 for paragraph text, and font weights create clear hierarchy (400 body, 600 headings)
 3. **Given** user views login card, **When** observing layout, **Then** card follows 24-column grid system, content centered with max-width constraint, padding responsive to viewport size, and visual hierarchy flows top-to-bottom
 4. **Given** user views dashboard content, **When** observing layout, **Then** content follows 24-column grid with breakpoints, cards have consistent elevation (1-3 levels), spacing between cards is consistent (16px-24px), and primary actions are visually dominant
@@ -96,20 +96,20 @@
 
 ### Functional Requirements
 
-- **FR-001**: Login page MUST display modern gradient background with overlay pattern, centered card layout with elevation 8, brand logo/icon in header section, and professional welcome messaging
+- **FR-001**: Login page MUST display split-screen layout (desktop ≥900px: 50% gradient left + 50% enterprise image right; mobile <900px: full-width image background with gradient card), Card with elevation 8, and professional welcome messaging ("Welcome Back" h4, "Sign in to your account" body2)
 - **FR-002**: Login form MUST implement real-time inline validation with debounce (300ms), display validation errors below fields with error icon, show success checkmarks on valid input, and prevent submission when validation fails
-- **FR-003**: Login button MUST show loading state with circular progress indicator during authentication, disable button during submission to prevent double-clicks, display loading text ("Signing in..."), and transition smoothly on success
+- **FR-003**: Login button MUST show loading state with circular progress indicator during authentication, disable button during submission to prevent double-clicks, display loading text ("Signing in..."), and transition at 60fps on success
 - **FR-004**: System MUST display user-friendly error messages for authentication failures, distinguish between invalid credentials vs server errors, provide actionable guidance ("Check your username/password"), and auto-dismiss success messages after 5 seconds
 - **FR-005**: Authenticated layout MUST include persistent top AppBar with elevation 4, brand identity section (logo + name) aligned left, user profile section aligned right, and logout button with confirmation dialog
-- **FR-006**: Dashboard MUST implement persistent left sidebar navigation with collapsible behavior, icon-only mini variant on tablet (≥992px), drawer variant on mobile (≥768px), and smooth expand/collapse transitions (300ms)
+- **FR-006**: Dashboard MUST implement left sidebar navigation using Material-UI X TreeView (SimpleTreeView + TreeItem) for hierarchical menu structure with persistent variant (desktop/tablet ≥768px) togglable via hamburger menu, temporary modal overlay variant on mobile (<768px) with z-index 1099 below AppBar (1100), drawer width 280px positioned below AppBar (top: 64px, height: calc(100% - 64px)), and smooth transitions (300ms max)
 - **FR-007**: User profile section MUST display user avatar with fallback to initials, username with truncation for long names, role badge (optional for future), and dropdown menu for user actions
-- **FR-008**: System MUST support light and dark color modes, provide theme toggle in user menu, sync with system preference when selected, persist user choice in localStorage, and prevent FOUC with InitColorSchemeScript
+- **FR-008**: System MUST support light and dark color modes, provide theme toggle in user menu, sync with system preference when selected, persist user choice in localStorage, and prevent FOUC with inline blocking script in index.html
 - **FR-009**: All interactive elements MUST meet minimum touch target size of 44x44px on mobile, provide hover states with smooth transitions (200ms), show focus indicators meeting WCAG AA contrast, and support keyboard navigation
 - **FR-010**: System MUST implement consistent spacing using 8px grid system, follow 24-column grid layout for content areas, maintain responsive breakpoints (mobile ≥768px, tablet ≥992px, desktop ≥1200px), and adapt layouts accordingly
 - **FR-011**: Typography MUST follow Material Design type scale with Roboto font family, use font weights appropriately (400 body, 500 medium, 600 headings), maintain minimum 16px body text size, and ensure WCAG AA contrast ratios
 - **FR-012**: System MUST provide loading indicators for all asynchronous operations exceeding 500ms, display skeleton screens for content loading states, show progress bars for determinate operations, and prevent layout shift during loading
 - **FR-013**: Error handling MUST display alerts with semantic colors (red for errors, yellow for warnings, green for success), include appropriate icons for visual reinforcement, provide dismiss actions, and auto-clear after timeout (5s success, 8s warnings, manual errors)
-- **FR-014**: Navigation sidebar MUST show active route highlighting, support nested menu items with expand/collapse, display tooltips on icon-only mode, and maintain scroll position when switching routes
+- **FR-014**: Navigation sidebar MUST show active route highlighting with Material-UI X TreeView for hierarchical navigation (SimpleTreeView + TreeItem components), support nested menu items with expand/collapse at 3+ levels deep, display proper tree indentation using treeItemClasses.groupTransition with connecting borders (marginLeft 20px, paddingLeft 18px, borderLeft 1px dashed), and maintain scroll position when switching routes
 - **FR-015**: System MUST respect user's prefers-reduced-motion setting, disable or minimize animations when detected, maintain functionality without motion, and provide instant transitions as alternative
 
 ### Key Entities *(include if feature involves data)*
@@ -123,23 +123,29 @@
 
 ### UI Layout Requirements
 
-**Login Page Layout**:
-- Full-viewport background with modern gradient (primary to secondary color) overlaid with subtle geometric pattern or noise texture
-- Centered card container with maximum width 450px, elevation 8 for depth, border-radius 16px for modern feel
-- Card internal padding 32px (desktop), 24px (tablet/mobile) following 8px grid system
-- Logo/brand icon centered at top with 40px-48px size, application name Typography h4 (weight 600), subtitle Typography body2 (color text.secondary)
-- Form section with vertical stack spacing 24px between fields, 32px before primary action button
-- Footer section with copyright Typography caption centered, separated by 32px top margin
-- Background implements fixed positioning to prevent scroll interference, maintains WCAG AA contrast for any overlay text
+**Login Page Layout** (UPDATED - Split-Screen Design):
+- **Desktop Layout (≥900px)**: Split-screen 50/50 horizontal layout using CSS Grid or Flexbox
+  - Left side: Gray-blue gradient background (#f5f7fa→#c3cfe2 light mode, #1a1a2e→#16213e dark mode) containing centered Card with default background, form content
+  - Right side: Enterprise building background image (Unsplash photo-1486406146926) with light blue tint overlay (rgba(25,118,210,0.1)) and "Enterprise Management" text overlay centered
+- **Mobile Layout (<900px)**: Full-width vertical stacking
+  - Background: Same enterprise building image full-width with stronger blue overlay (rgba(25,118,210,0.7))
+  - Card: Gradient background (#f5f7fa→#c3cfe2 light, #1a1a2e→#16213e dark) containing form, centered with padding
+- **Card Details**: Maximum width 400px (mobile), 480px (desktop), elevation 8 for depth, centered positioning
+- **Card Internal Padding**: 48px×32px (desktop), responsive adjustments for mobile following 8px grid system
+- **Form Content**: "Welcome Back" Typography h4 heading, "Sign in to your account" Typography body2 subtitle, form fields with 24px spacing, Sign In button full-width
+- **Footer**: Copyright Typography caption centered, separated by margin
+- **Responsive Breakpoint**: md breakpoint (~900px) switches between desktop split-screen and mobile full-width layouts
+- **Rationale**: User feedback requested professional enterprise aesthetic with background imagery for modern, confident brand presentation
 
-**Authenticated Layout Structure**:
-- Top AppBar fixed positioning with height 64px (desktop), 56px (mobile), elevation 4, zIndex 1200 (above drawer)
-- AppBar left section: Brand logo/icon 32px size, application name Typography h6, total width ~200px
+**Authenticated Layout Structure** (IMPLEMENTATION):
+- Top AppBar fixed positioning with height 64px (all viewports), elevation 4, zIndex 1100 (drawer modal at 1099)
+- AppBar left section: Hamburger menu icon (mobile), brand logo/icon 32px size, application name Typography h6
 - AppBar center section: Reserved for global search (future), breadcrumbs for deep navigation paths
 - AppBar right section: Notification IconButton with Badge, User Avatar (40px), username Typography body1, dropdown IconButton
-- Left sidebar persistent drawer with width 240px (expanded), 64px (mini), elevation 0 (inline with content), top position 64px below AppBar
+- Left sidebar drawer with Material-UI X TreeView (SimpleTreeView + TreeItem), width 280px, elevation 0 (inline), positioned below AppBar (top: 64px, height: calc(100% - 64px))
+- TreeView navigation supports 3+ levels deep with proper indentation (marginLeft: 20px, paddingLeft: 18px, borderLeft: 1px dashed) using treeItemClasses.groupTransition
 - Main content area with padding 24px (desktop), 16px (mobile), max-width 1440px centered, follows 24-column grid system
-- Responsive behavior: Desktop (≥1200px) shows persistent expanded sidebar, Tablet (≥992px) shows mini sidebar expanding on hover, Mobile (≥768px) shows hamburger menu with temporary drawer
+- Responsive behavior: Desktop/Tablet (≥768px) shows persistent drawer with toggle capability, Mobile (<768px) shows temporary modal drawer (z-index 1099) triggered by hamburger menu
 
 ### Visual Design Standards
 
@@ -179,11 +185,13 @@
 - Submit button states: Default (contained primary), Hover (elevation increases 2→4, background darkens 10%), Active (elevation decreases to 1), Loading (disabled with CircularProgress size 24px centered), Success (brief checkmark animation before navigation)
 - Error display: Alert component slides in from top (300ms), includes appropriate icon (ErrorOutline), error text in body1, dismissible with IconButton or auto-dismiss for non-critical errors
 
-**Navigation Interactions**:
+**Navigation Interactions** (UPDATED - TreeView Implementation):
+- TreeView hierarchy: Material-UI X TreeView (SimpleTreeView + TreeItem) displays nested menu structure with 3+ levels deep support (e.g., Reports > Sales Reports > Monthly/Quarterly/Yearly)
+- Tree indentation: Conditional styling using spread operator `...(hasChildren && { [`& .${treeItemClasses.groupTransition}`]: { marginLeft: '20px', paddingLeft: '18px', borderLeft: `1px dashed ${alpha(theme.palette.text.primary, 0.4)}` } })` applied only to parent items for proper visual hierarchy
 - Sidebar hover (mini mode): Item expands to show label in tooltip (Tooltip placement="right", enterDelay 300ms), background highlight on hover with 200ms transition
 - Sidebar click: Active item shows primary color background (8% opacity light, 12% dark), left border accent 3px solid primary, text color switches to primary
-- Nested menu expand: Collapse component with smooth height transition (300ms), nested items indented 16px, expand/collapse icon rotates 180° (200ms)
-- Drawer open/close (mobile): Swipeable drawer slides from left edge (300ms), backdrop overlay fades in (0.5 opacity), click-away or swipe-right to dismiss
+- Nested menu expand: TreeItem expansion with smooth transition (300ms), visual connecting borders show hierarchy, expand/collapse icon rotates 90° (200ms), defaultExpandedItems prop for initial open state
+- Drawer open/close (mobile): Swipeable drawer slides from left edge (300ms), backdrop overlay fades in (0.5 opacity), click-away or swipe-right to dismiss, z-index 1099 (below AppBar 1100) prevents hamburger menu blocking
 - AppBar user menu: Dropdown Menu opens below avatar with Popper positioning, fade-in animation (200ms), closes on selection or click-away
 
 **Feedback Mechanisms**:
@@ -250,13 +258,13 @@
 - Page transitions: Fade in/out components (300ms ease-in-out) when mounting/unmounting, no sliding or complex choreography
 - Button interactions: Elevation changes on hover (200ms ease-out), ripple effect on click (350ms), scale slightly on active state (95% transform)
 - Drawer/Modal: Slide animations for drawer (300ms ease-out), backdrop fade in (200ms linear), coordinated timing for smooth appearance
-- Form feedback: Error shake animation (400ms with 3 small horizontal shifts), success checkmark draw animation (300ms), field highlight pulse (200ms)
+- Form feedback: Error shake animation (300ms with 3 small horizontal shifts), success checkmark draw animation (300ms), field highlight pulse (200ms)
 - Loading states: Indeterminate circular progress rotation (1.4s linear infinite), skeleton shimmer effect (1.5s linear infinite), subtle pulse on loading buttons
 
 **Animation Technical Requirements**:
 - GPU acceleration: Use `transform` and `opacity` properties only, avoid animating `height`, `width`, `top`, `left`, `background-color` directly
 - Timing functions: `ease-out` for entrances (300ms), `ease-in-out` for state changes (200ms), `linear` for continuous animations (progress spinners)
-- Duration limits: Maximum 300ms for functional animations, 400ms for complex multi-step animations (error shake), no infinite animations except loading indicators
+- Duration limits: Maximum 300ms for all functional animations per Constitution Section VIII, no exceptions, no infinite animations except loading indicators
 - Reduced motion support: Detect `prefers-reduced-motion: reduce` media query, disable non-essential animations, reduce durations to 50ms or instant (0ms), maintain state changes without motion
 
 **Reduced Motion Implementation**:
@@ -328,8 +336,8 @@ const theme = createTheme({
 - **SC-003**: Form validation errors reduce user confusion - measured by reduction in repeated failed login attempts by ≥30% due to clearer error messaging (baseline: 23% repeat failures → target ≤16%)
 - **SC-004**: Dashboard navigation is intuitive - measured by user survey showing ≥90% of users can locate primary navigation items without guidance in first use (baseline: establish in usability testing)
 - **SC-005**: Mobile responsiveness meets usability standards - measured by successful task completion rate ≥85% on tablet/mobile devices (minimum 768px width) without desktop access (baseline: establish in mobile testing)
-- **SC-006**: Accessibility compliance verified - measured by automated WCAG AA audit showing 0 critical violations, manual keyboard navigation testing 100% success rate, screen reader compatibility verified on NVDA/JAWS
-- **SC-007**: Dark mode adoption indicates user preference - measured by ≥30% of users enabling dark mode within first week of availability (indicates successful implementation and user awareness)
+- **SC-006**: Accessibility compliance verified - measured by automated WCAG AA audit showing 0 critical violations and 0 serious violations, manual keyboard navigation testing 100% success rate, screen reader compatibility verified on NVDA/JAWS
+- **SC-007**: Dark mode adoption indicates user preference - qualitative assessment that dark mode is discoverable, functional, and used by stakeholders (analytics tracking deferred to future phase per OOS-011)
 - **SC-008**: Animation performance maintains smooth experience - measured by Chrome DevTools showing 60fps during all transitions, 0 long tasks blocking main thread during animations
 - **SC-009**: Initial load performance meets enterprise standards - measured by Lighthouse performance score ≥90, Time to Interactive (TTI) <3 seconds on 3G connection, Cumulative Layout Shift (CLS) <0.1
 - **SC-010**: User satisfaction improves with redesign - measured by Net Promoter Score (NPS) increase of ≥15 points post-redesign vs. current baseline, reduced UI-related support tickets by ≥40%
@@ -400,7 +408,7 @@ const theme = createTheme({
 ### High Priority Risks
 
 - **RISK-H1 - Design-Development Mismatch**: Risk that implemented UI doesn't match stakeholder visual expectations due to subjective "modern" and "professional" interpretation.
-  - *Mitigation*: Create interactive Figma mockups for approval before implementation, establish design review checkpoint before Phase 4, use Material-UI examples as baseline reference
+  - *Mitigation*: Create ASCII/visual mockups for design validation (non-blocking, can proceed with implementation), establish design review checkpoint after Phase 3 (US1) for early feedback, use Material-UI examples as baseline reference
   - *Impact if realized*: 2-3 days rework, delayed delivery, stakeholder dissatisfaction
 
 - **RISK-H2 - Accessibility Regression**: Risk that modern visual designs inadvertently reduce accessibility (e.g., insufficient contrast, keyboard navigation breaks).
