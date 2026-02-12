@@ -1,0 +1,471 @@
+openapi: 3.0.3
+info:
+  title: Actions Management API
+  description: CRUD operations for system actions in the Security domain (Sec_Actions table)
+  version: 1.0.0
+  contact:
+    name: Security Module Team
+    email: security-team@example.com
+
+servers:
+  - url: http://localhost:5000/api
+    description: Local development server
+  - url: https://api-dev.example.com/api
+    description: Development environment
+  - url: https://api.example.com/api
+    description: Production environment
+
+paths:
+  /actions:
+    get:
+      summary: List all actions with server-side pagination, sorting, and filtering
+      operationId: listActions
+      tags:
+        - Actions
+      parameters:
+        - name: page
+          in: query
+          description: Page number (1-based)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          description: Number of rows per page
+          required: false
+          schema:
+            type: integer
+            enum: [10, 25, 50, 100]
+            default: 10
+        - name: sortColumn
+          in: query
+          description: Column name to sort by
+          required: false
+          schema:
+            type: string
+            enum:
+              - actionId
+              - actionCode
+              - actionTitle
+              - createdDate
+              - modifiedDate
+            default: actionId
+        - name: sortDirection
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+        - name: filterText
+          in: query
+          description: Global search text (searches ActionCode OR ActionTitle)
+          required: false
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        '200':
+          description: Actions list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Action'
+                  totalCount:
+                    type: integer
+                    description: Total number of actions matching filter
+                    example: 150
+                  page:
+                    type: integer
+                    description: Current page number
+                    example: 1
+                  pageSize:
+                    type: integer
+                    description: Rows per page
+                    example: 10
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      summary: Create a new action
+      operationId: createAction
+      tags:
+        - Actions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateActionRequest'
+      responses:
+        '201':
+          description: Action created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Action'
+                  message:
+                    type: string
+                    example: Action created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /actions/{id}:
+    get:
+      summary: Get a single action by ID
+      operationId: getAction
+      tags:
+        - Actions
+      parameters:
+        - name: id
+          in: path
+          description: Action ID
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Action retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Action'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      summary: Update an existing action
+      operationId: updateAction
+      tags:
+        - Actions
+      parameters:
+        - name: id
+          in: path
+          description: Action ID
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateActionRequest'
+      responses:
+        '200':
+          description: Action updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Action'
+                  message:
+                    type: string
+                    example: Action updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /actions/check-code:
+    get:
+      summary: Check if an ActionCode is available (async validation)
+      operationId: checkActionCode
+      tags:
+        - Actions
+      parameters:
+        - name: code
+          in: query
+          description: ActionCode to check
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 50
+        - name: excludeActionId
+          in: query
+          description: ActionID to exclude from check (for update scenario)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: ActionCode availability checked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  available:
+                    type: boolean
+                    description: true if ActionCode is available, false if already exists
+                    example: true
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /actions/export:
+    get:
+      summary: Export actions to CSV with optional sorting and filtering
+      operationId: exportActions
+      tags:
+        - Actions
+      parameters:
+        - name: sortColumn
+          in: query
+          description: Column name to sort by
+          required: false
+          schema:
+            type: string
+            enum:
+              - actionId
+              - actionCode
+              - actionTitle
+              - createdDate
+              - modifiedDate
+            default: actionId
+        - name: sortDirection
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+        - name: filterText
+          in: query
+          description: Global search text (searches ActionCode OR ActionTitle)
+          required: false
+          schema:
+            type: string
+            maxLength: 100
+      responses:
+        '200':
+          description: CSV export generated successfully
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              description: Attachment filename
+              schema:
+                type: string
+                example: 'attachment; filename="actions_export_20260212_143022.csv"'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    Action:
+      type: object
+      properties:
+        actionId:
+          type: integer
+          description: Unique identifier (primary key)
+          example: 1
+        actionCode:
+          type: string
+          description: Unique action code (alphanumeric with underscore, hyphen, period)
+          maxLength: 50
+          pattern: '^[a-zA-Z0-9_.-]+$'
+          example: USER_CREATE
+        actionTitle:
+          type: string
+          description: Human-readable action title
+          maxLength: 200
+          example: Create User
+        createdBy:
+          type: integer
+          description: UserID of creator
+          example: 123
+        createdDate:
+          type: string
+          format: date-time
+          description: UTC timestamp of creation
+          example: '2026-02-12T14:30:22Z'
+        modifiedBy:
+          type: integer
+          nullable: true
+          description: UserID of last modifier (null if never modified)
+          example: 456
+        modifiedDate:
+          type: string
+          format: date-time
+          nullable: true
+          description: UTC timestamp of last modification (null if never modified)
+          example: '2026-02-12T15:45:10Z'
+      required:
+        - actionId
+        - actionCode
+        - actionTitle
+        - createdBy
+        - createdDate
+
+    CreateActionRequest:
+      type: object
+      properties:
+        actionCode:
+          type: string
+          description: Unique action code (alphanumeric with underscore, hyphen, period)
+          maxLength: 50
+          pattern: '^[a-zA-Z0-9_.-]+$'
+          example: USER_CREATE
+        actionTitle:
+          type: string
+          description: Human-readable action title
+          maxLength: 200
+          example: Create User
+        createdBy:
+          type: integer
+          description: UserID of creator
+          example: 123
+      required:
+        - actionCode
+        - actionTitle
+        - createdBy
+
+    UpdateActionRequest:
+      type: object
+      properties:
+        actionCode:
+          type: string
+          description: Unique action code (alphanumeric with underscore, hyphen, period)
+          maxLength: 50
+          pattern: '^[a-zA-Z0-9_.-]+$'
+          example: USER_CREATE
+        actionTitle:
+          type: string
+          description: Human-readable action title
+          maxLength: 200
+          example: Create User
+        modifiedBy:
+          type: integer
+          description: UserID of modifier
+          example: 456
+        originalModifiedDate:
+          type: string
+          format: date-time
+          nullable: true
+          description: ModifiedDate captured on form load (for optimistic concurrency check)
+          example: '2026-02-12T15:45:10Z'
+      required:
+        - actionCode
+        - actionTitle
+        - modifiedBy
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: User-friendly error message
+          example: ActionCode already exists. Please use a unique code.
+        errorCode:
+          type: string
+          description: Application-specific error code (50001-50015)
+          pattern: '^500[0-9]{2}$'
+          example: '50001'
+      required:
+        - error
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters or validation failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            validation-error:
+              value:
+                error: ActionCode is required.
+                errorCode: '50011'
+            invalid-format:
+              value:
+                error: ActionCode can only contain letters, numbers, underscores, hyphens, and periods.
+                errorCode: '50014'
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            action-not-found:
+              value:
+                error: Action not found.
+                errorCode: '50003'
+
+    Conflict:
+      description: Conflict with existing resource or concurrent modification
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            duplicate-code-create:
+              value:
+                error: Action code already exists. Please use a unique code.
+                errorCode: '50001'
+            duplicate-code-update:
+              value:
+                error: Action code already exists for another action. Please use a unique code.
+                errorCode: '50002'
+            concurrency-conflict:
+              value:
+                error: This action was modified by another user. Please refresh and try again.
+                errorCode: '50004'
+
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            generic-error:
+              value:
+                error: An unexpected error occurred. Please try again.
+
+tags:
+  - name: Actions
+    description: CRUD operations for system actions

@@ -38,10 +38,8 @@ describe('AuthContext - Session Persistence Integration', () => {
         username: 'Admin',
         expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
         isValid: true
-      },
-      message: 'Session valid'
+      }
     });
-
     // Act: Render AuthProvider which calls checkSession on mount
     render(
       <AuthProvider>
@@ -69,8 +67,7 @@ describe('AuthContext - Session Persistence Integration', () => {
     // Arrange: Mock failed session validation
     const mockValidateSession = vi.spyOn(authService, 'validateSession').mockRejectedValue({
       success: false,
-      errorCode: 'SEC-02-002',
-      message: 'Session expired'
+      errorCode: 'SEC-02-002'
     });
 
     // Mock console.error to avoid test output noise
@@ -108,8 +105,7 @@ describe('AuthContext - Session Persistence Integration', () => {
     // Arrange: Mock session validation with success but no data
     const mockValidateSession = vi.spyOn(authService, 'validateSession').mockResolvedValue({
       success: true,
-      data: null,
-      message: 'No session data'
+      data: null
     });
 
     // Act: Render AuthProvider
@@ -144,8 +140,7 @@ describe('AuthContext - Session Persistence Integration', () => {
               username: 'Admin',
               expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
               isValid: true
-            },
-            message: 'Session valid'
+            }
           });
         }, 100); // 100ms delay
       });

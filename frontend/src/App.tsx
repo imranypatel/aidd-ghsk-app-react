@@ -1,22 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { CssBaseline } from '@mui/material';
 import { LoginPage } from './pages/LoginPage';
 import { Dashboard } from './pages/Dashboard';
-
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-  spacing: 8,
-});
+import { ThemeColorProvider } from './contexts/ThemeColorContext';
+import { useTheme } from './hooks/useTheme';
 
 function RootRedirect() {
   const { isAuthenticated, loading } = useAuth();
@@ -28,9 +17,11 @@ function RootRedirect() {
   return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />;
 }
 
-function App() {
+function AppContent() {
+  const { theme } = useTheme();
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeColorProvider mode={theme.effectiveMode}>
       <CssBaseline />
       <BrowserRouter>
         <AuthProvider>
@@ -48,8 +39,12 @@ function App() {
           </Routes>
         </AuthProvider>
       </BrowserRouter>
-    </ThemeProvider>
+    </ThemeColorProvider>
   );
+}
+
+function App() {
+  return <AppContent />;
 }
 
 export default App;
