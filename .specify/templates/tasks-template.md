@@ -62,31 +62,12 @@ description: "Task list template for feature implementation"
 
 Examples of foundational tasks (adjust based on your project):
 
-<!--
-  CONSTITUTIONAL REQUIREMENTS - Database-First Approach:
-  - Database artifacts MUST be created BEFORE application code
-  - ALL CRUD operations MUST use stored procedures (no direct table access)
-  - ALL stored procedures MUST implement tState output pattern
-  - DbUp migrations required (idempotent, versioned, with rollback scripts)
-  - Naming conventions: Tables = <Domain>_<Entity>, Procedures = <Domain><Entity><Action>
-  - Auditing infrastructure required (Audit_* tables/procedures)
-  - See .specify/memory/constitution.md for complete database governance rules
--->
-
-- [ ] T004 Setup database schema and migrations framework (DbUp with versioned, idempotent scripts)
-- [ ] T005 Create database naming convention validation (tables: `<Domain>_<Entity>`, procedures: `<Domain><Entity><Action>`)
-- [ ] T006 Implement tState output pattern for stored procedures (`@tState VARCHAR(500) OUTPUT`)
-- [ ] T007 Create auditing infrastructure (Audit_* tables and base procedures)
-- [ ] T008 Define application-level error code taxonomy (preserve native SQL errors)
-- [ ] T009 [P] Implement authentication/authorization framework (stored procedures with tState)
-- [ ] T010 [P] Setup API routing and middleware structure (ASP.NET Core Web API, Swagger/OpenAPI)
-- [ ] T011 Create Dapper data access layer (stored procedure calling patterns)
-- [ ] T012 Configure error handling and logging infrastructure (Serilog server, structured client logging)
-- [ ] T013 Setup environment configuration management
-- [ ] T014 Define application architecture layers (Presentation/Application/Infrastructure/Database boundaries)
-- [ ] T015 Create layer interface contracts (Application → Infrastructure dependency inversion)
-- [ ] T016 Implement global exception middleware (centralized error handling)
-- [ ] T017 Setup correlation ID propagation across layers
+- [ ] T004 Setup database schema and migrations framework
+- [ ] T005 [P] Implement authentication/authorization framework
+- [ ] T006 [P] Setup API routing and middleware structure
+- [ ] T007 Create base models/entities that all stories depend on
+- [ ] T008 Configure error handling and logging infrastructure
+- [ ] T009 Setup environment configuration management
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -101,14 +82,6 @@ Examples of foundational tasks (adjust based on your project):
 ### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
->
-> **CONSTITUTIONAL REQUIREMENT - TDD Mandatory**:
-> - Client: Vitest/Jest/React Testing Library
-> - Server: xUnit/NUnit
-> - No production code without tests (Red-Green-Refactor cycle)
-> - Coverage MUST include: components, hooks, routing, state (client); business logic and APIs/database (server)
-> - Database-dependent logic MUST have test coverage
-> - See .specify/memory/constitution.md for complete testing requirements
 
 - [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
 - [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
@@ -117,12 +90,10 @@ Examples of foundational tasks (adjust based on your project):
 
 - [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
 - [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Repository] in Infrastructure layer (Dapper, stored procedure execution)
-- [ ] T015 [US1] Implement [Application Service] in Application layer (use case orchestration, tState interpretation)
-- [ ] T016 [US1] Implement [Controller endpoint] in Presentation layer (thin, HTTP only)
-- [ ] T017 [US1] Add validation and error handling (Application layer)
-- [ ] T018 [US1] Add logging for user story 1 operations (middleware/infrastructure sinks)
-- [ ] T019 [US1] Validate layer boundaries and dependency direction
+- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
+- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T016 [US1] Add validation and error handling
+- [ ] T017 [US1] Add logging for user story 1 operations
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 

@@ -1,0 +1,436 @@
+openapi: 3.0.3
+info:
+  title: Authentication API
+  description: |
+    Authentication API for User Login and Logout feature.
+    
+    This API provides endpoints for administrator authentication, session management, and logout functionality.
+    All endpoints follow RESTful principles and return standardized response envelopes.
+    
+    **Constitutional Compliance**:
+    - All database operations executed via stored procedures (Dapper)
+    - tState pattern used for error handling in stored procedures
+    - Layered architecture: Controllers → Application → Infrastructure → Database
+    - Session tokens stored in httpOnly cookies for security
+    
+    **Authentication Flow**:
+    1. Client POSTs credentials to `/api/auth/login`
+    2. Server validates credentials, creates session, returns JWT token in httpOnly cookie
+    3. Client includes cookie automatically in subsequent requests
+    4. Server validates JWT + database session on each protected route
+    5. Client POSTs to `/api/auth/logout` to terminate session
+  version: 1.0.0
+  contact:
+    name: Development Team
+servers:
+  - url: http://localhost:5000
+    description: Local development server
+  - url: https://api.example.com
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: User authentication and session management
+
+paths:
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate user and create session
+      description: |
+        Validates user credentials (username and password) against stored credentials in the database.
+        If authentication succeeds, creates a new session with 30-minute expiration and returns a JWT token in an httpOnly cookie.
+        
+        **Business Rules**:
+        - Only one active session per user (previous sessions are marked inactive)
+        - Session expires after 30 minutes of inactivity
+        - Failed login attempts are logged to audit table
+        - No account lockout (unlimited login attempts allowed)
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              validCredentials:
+                summary: Valid admin credentials
+                value:
+                  username: Admin
+                  password: Admin123@
+              invalidPassword:
+                summary: Invalid password
+                value:
+                  username: Admin
+                  password: WrongPassword
+              emptyFields:
+                summary: Empty fields
+                value:
+                  username: ""
+                  password: ""
+      responses:
+        '200':
+          description: Authentication successful
+          headers:
+            Set-Cookie:
+              description: Session token stored in httpOnly cookie
+              schema:
+                type: string
+                example: auth_session_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite=Strict; Max-Age=1800; Path=/
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                success:
+                  summary: Successful login
+                  value:
+                    success: true
+                    data:
+                      user:
+                        userId: 1
+                        username: Admin
+                      session:
+                        expiresAt: "2026-02-09T15:30:00.0000000Z"
+                    message: Login successful
+        '400':
+          description: Bad request (validation errors)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                emptyUsername:
+                  summary: Username is required
+                  value:
+                    success: false
+                    errorCode: VAL-01-001
+                    message: Username is required
+                emptyPassword:
+                  summary: Password is required
+                  value:
+                    success: false
+                    errorCode: VAL-01-002
+                    message: Password is required
+        '401':
+          description: Unauthorized (invalid credentials)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidCredentials:
+                  summary: Invalid username or password
+                  value:
+                    success: false
+                    errorCode: SEC-01-001
+                    message: Invalid username or password. Please try again.
+                userNotFound:
+                  summary: User does not exist
+                  value:
+                    success: false
+                    errorCode: SEC-01-002
+                    message: Invalid username or password. Please try again.
+                userInactive:
+                  summary: User account is inactive
+                  value:
+                    success: false
+                    errorCode: SEC-01-004
+                    message: User account is inactive. Please contact support.
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                databaseError:
+                  summary: Database error
+                  value:
+                    success: false
+                    errorCode: SYS-01-001
+                    message: An unexpected error occurred. Please try again later.
+
+  /api/auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: End user session (logout)
+      description: |
+        Terminates the current user session by marking the session inactive in the database.
+        Clears the session token cookie.
+        
+        **Business Rules**:
+        - Requires valid session token in cookie
+        - Logs logout event to audit table
+        - Idempotent (multiple logout calls with same token are safe)
+      operationId: logout
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          headers:
+            Set-Cookie:
+              description: Session token cookie cleared
+              schema:
+                type: string
+                example: auth_session_token=; HttpOnly; Secure; SameSite=Strict; Max-Age=0; Path=/
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
+              examples:
+                success:
+                  summary: Successful logout
+                  value:
+                    success: true
+                    message: Logout successful
+        '401':
+          description: Unauthorized (no valid session)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                noSession:
+                  summary: No active session
+                  value:
+                    success: false
+                    errorCode: SEC-02-001
+                    message: No active session found. Please log in.
+                sessionExpired:
+                  summary: Session expired
+                  value:
+                    success: false
+                    errorCode: SEC-02-002
+                    message: Your session has expired. Please log in again.
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/session:
+    get:
+      tags:
+        - Authentication
+      summary: Validate current session
+      description: |
+        Checks if the current session token is valid (active and not expired).
+        Returns user information if session is valid.
+        
+        **Business Rules**:
+        - Validates JWT signature and expiration (stateless check)
+        - Validates session is active in database (stateful check)
+        - Used by frontend to check authentication status on page load
+      operationId: validateSession
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Session is valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionValidationResponse'
+              examples:
+                valid:
+                  summary: Valid session
+                  value:
+                    success: true
+                    data:
+                      user:
+                        userId: 1
+                        username: Admin
+                      session:
+                        expiresAt: "2026-02-09T15:30:00.0000000Z"
+                    message: Session valid
+        '401':
+          description: Unauthorized (invalid or expired session)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                sessionExpired:
+                  summary: Session expired
+                  value:
+                    success: false
+                    errorCode: SEC-02-002
+                    message: Your session has expired. Please log in again.
+                sessionInactive:
+                  summary: Session terminated
+                  value:
+                    success: false
+                    errorCode: SEC-02-003
+                    message: Your session has been terminated. Please log in again.
+                noSession:
+                  summary: No session found
+                  value:
+                    success: false
+                    errorCode: SEC-02-001
+                    message: No active session found. Please log in.
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: auth_session_token
+      description: JWT session token stored in httpOnly cookie
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 100
+          description: Username for authentication
+          example: Admin
+        password:
+          type: string
+          minLength: 1
+          maxLength: 255
+          format: password
+          description: Password for authentication
+          example: Admin123@
+
+    LoginResponse:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: Indicates if login was successful
+          example: true
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+            session:
+              $ref: '#/components/schemas/Session'
+        message:
+          type: string
+          description: Human-readable success message
+          example: Login successful
+
+    LogoutResponse:
+      type: object
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+          description: Indicates if logout was successful
+          example: true
+        message:
+          type: string
+          description: Human-readable success message
+          example: Logout successful
+
+    SessionValidationResponse:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: Indicates if session is valid
+          example: true
+        data:
+          type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+            session:
+              $ref: '#/components/schemas/Session'
+        message:
+          type: string
+          description: Human-readable message
+          example: Session valid
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - errorCode
+        - message
+      properties:
+        success:
+          type: boolean
+          description: Always false for error responses
+          example: false
+        errorCode:
+          type: string
+          description: Application error code for diagnostics
+          example: SEC-01-001
+        message:
+          type: string
+          description: User-friendly error message
+          example: Invalid username or password. Please try again.
+        details:
+          type: object
+          description: Optional additional error details (only in development)
+          additionalProperties: true
+
+    User:
+      type: object
+      required:
+        - userId
+        - username
+      properties:
+        userId:
+          type: integer
+          format: int32
+          description: Unique user identifier
+          example: 1
+        username:
+          type: string
+          description: Username
+          example: Admin
+
+    Session:
+      type: object
+      required:
+        - expiresAt
+      properties:
+        expiresAt:
+          type: string
+          format: date-time
+          description: ISO 8601 datetime when session expires (UTC)
+          example: "2026-02-09T15:30:00.0000000Z"
+
+  examples:
+    LoginRequestExample:
+      value:
+        username: Admin
+        password: Admin123@
+    
+    LoginSuccessExample:
+      value:
+        success: true
+        data:
+          user:
+            userId: 1
+            username: Admin
+          session:
+            expiresAt: "2026-02-09T15:30:00.0000000Z"
+        message: Login successful
+    
+    LoginFailureExample:
+      value:
+        success: false
+        errorCode: SEC-01-001
+        message: Invalid username or password. Please try again.

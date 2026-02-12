@@ -31,71 +31,7 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-### Technology Stack Compliance
-
-- [ ] **Client**: React 19.2.4 with Vite 7.3.1, TypeScript mandatory (JavaScript only if technically impossible with justification)
-- [ ] **UI Library**: @mui/material, @emotion/react, @emotion/styled, @mui/icons-material, @mui/x-data-grid 8.x, @mui/x-tree-view 8.x
-- [ ] **Routing**: React Router 7.13.0
-- [ ] **Server**: ASP.NET Core 10 Web API (no MVC Views, Razor Pages, or Blazor)
-- [ ] **Database**: SQL Server 2025
-- [ ] **Data Access**: Dapper with Stored Procedures (no Entity Framework or ORM auto-tracking)
-- [ ] **Logging**: Client structured logging (configurable, no console-only in prod); Server Serilog with correlation IDs
-
-### Architecture Compliance
-
-- [ ] **Application Type**: Full-Stack Enterprise Application confirmed
-- [ ] **Client**: Single Page Application (SPA) architecture
-- [ ] **Server**: API-only backend (RESTful, versioned, consistent response envelopes)
-- [ ] **Database**: Central authoritative data store (rule-enforcing authority)
-- [ ] **Hosting**: IIS 10.0 target confirmed
-
-### Database Governance
-
-- [ ] **Naming Conventions**: Tables follow `<Domain>_<Entity>` format (e.g., `Sec_Users`, `Core_Students`)
-- [ ] **Stored Procedures**: Follow `<Domain><Entity><Action>` format (e.g., `Sec_Users_Get`, `Sec_Users_Authenticate_User`)
-- [ ] **tState Pattern**: ALL stored procedures return `@tState VARCHAR(500) OUTPUT` with format `<STATUS>~<ERRORCODE>~<DATA>~<MESSAGE>`
-- [ ] **CRUD Interface**: ALL CRUD operations use stored procedures (no direct table access)
-- [ ] **Error Handling**: Application-level error code taxonomy defined; native SQL errors preserved
-- [ ] **Transactions**: Owned inside stored procedures (Begin/Commit/Rollback)
-- [ ] **Auditing**: Required for authentication, security changes, and mutating operations (Audit_* tables/procedures)
-- [ ] **Schema Versioning**: DbUp with idempotent, versioned migrations and paired rollback scripts
-
-### Testing Requirements (TDD Mandatory)
-
-- [ ] **Client Tests**: Vitest/Jest/React Testing Library with coverage for components, hooks, routing, state
-- [ ] **Server Tests**: xUnit/NUnit with unit tests for business logic and integration tests for APIs/database
-- [ ] **Test-First**: No production code without tests (Red-Green-Refactor cycle enforced)
-- [ ] **Database Tests**: All database-dependent logic has test coverage
-
-### API Standards
-
-- [ ] **Swagger**: OpenAPI documentation mandatory for all endpoints
-- [ ] **RESTful**: APIs follow REST principles
-- [ ] **Versioning**: API versioning enforced
-- [ ] **Response Envelopes**: Consistent response structure defined
-
-### Compliance Validation
-
-- [ ] No assumptions about schema, persistence, transactions, or data integrity
-- [ ] Clarifying questions documented for any ambiguity
-- [ ] Database artifacts generated BEFORE application code
-- [ ] All naming conventions enforced
-- [ ] No constitutional violations present
-
-### Application Architecture Compliance (Layered Architecture)
-
-- [ ] **4-Layer Model**: Presentation → Application → Infrastructure → Database layers defined
-- [ ] **Dependency Direction**: Unidirectional flow enforced (no reverse dependencies, no layer bypassing)
-- [ ] **Presentation Layer (Controllers)**: Thin controllers, HTTP concerns only, no business logic or database access
-- [ ] **Application Layer (Use Cases)**: Business orchestration, tState interpretation, one service per use case, stateless
-- [ ] **Infrastructure Layer (Repositories)**: Dapper execution, stored procedure calls, raw tState surfacing, no business logic
-- [ ] **Database Layer**: Transaction ownership, data integrity, minimal defensive logic, no workflow orchestration
-- [ ] **Error Flow**: Database → Infrastructure (raw) → Application (interpretation) → Presentation (HTTP mapping)
-- [ ] **Cross-Cutting Concerns**: Centralized logging/auditing/exception handling, correlation IDs propagated
-- [ ] **Transaction Boundaries**: Database owns transactions, application defines intent, no application-level transaction management
-- [ ] **Architectural Integrity**: Architecture wins over implementation convenience
-
-**Status**: ⚠️ MUST PASS ALL GATES BEFORE PROCEEDING
+[Gates determined based on constitution file]
 
 ## Project Structure
 
