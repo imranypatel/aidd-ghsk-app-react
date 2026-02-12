@@ -27,6 +27,7 @@ General: Follow standard conventions
 
 ## Recent Changes
 - 002-modern-ui-redesign: Added TypeScript 5.x (strict mode) - React 19.2.4
+- 002-modern-ui-redesign: Added TypeScript 5.x (strict mode) - React 19.2.4
 - 001-auth-welcome: Added SQL Server 2025 with Sec_Users and Audit_Operations tables
 
 
